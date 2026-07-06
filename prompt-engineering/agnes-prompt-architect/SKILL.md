@@ -259,8 +259,10 @@ print('✅ Video prompt includes motion')
 "
 ```
 
-## 參考
+## References
 
 - `agnes-quota-router/references/agnes-image-2.1-flash.md` — Image API 細節
 - `agnes-quota-router/references/agnes-video-v2.0.md` — Video API 細節
 - `agnes-quota-router/SKILL.md` — 路由與金鑰管理
+- `media-pipeline/SKILL.md` — 自動化流水線執行引擎
+- `media-pipeline/scripts/pipeline.py` — Python 執行腳本（金鑰從 env 讀取，不在 repo 內）

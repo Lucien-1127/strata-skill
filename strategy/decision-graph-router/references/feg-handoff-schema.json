@@ -1,0 +1,172 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zhiyan-legal/feg-orchestrator-handoff.schema.json",
+  "title": "FEG → Strat-Orchestrator 交接協議",
+  "description": "FEG Decision Graph Router 解析完成後，將結果以結構化格式傳遞給 strat-orchestrator 進行深度處理。",
+  "type": "object",
+  "required": ["handoff_version", "feg_output", "timestamp"],
+  "properties": {
+    "handoff_version": {
+      "type": "string",
+      "const": "1.0",
+      "description": "交接協議版本"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "FEG 解析完成的時間戳"
+    },
+    "feg_output": {
+      "type": "object",
+      "required": ["detected_domains", "priority_chain", "state", "feg_c_syntax"],
+      "properties": {
+        "detected_domains": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 7,
+          "items": {
+            "type": "object",
+            "required": ["code", "label", "confidence", "trigger_keywords"],
+            "properties": {
+              "code": {
+                "type": "string",
+                "enum": ["D_A", "D_B", "D_C", "D_D", "D_E", "D_F", "D_G"],
+                "description": "域碼（Domain Code）"
+              },
+              "label": {
+                "type": "string",
+                "description": "域的中文標籤"
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+                "description": "域匹配信心度"
+              },
+              "trigger_keywords": {
+                "type": "array",
+                "items": {"type": "string"},
+                "description": "觸發此域的關鍵字"
+              }
+            }
+          }
+        },
+        "priority_chain": {
+          "type": "object",
+          "required": ["mode", "order"],
+          "properties": {
+            "mode": {
+              "type": "string",
+              "enum": ["COMPLEX_FIRST", "USER_ORDER", "DEADLINE_FIRST", "SAFETY_OVERRIDE"],
+              "description": "優先級模式"
+            },
+            "order": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "域碼的有序列表（從高優先到低優先）"
+            },
+            "override_reason": {
+              "type": "string",
+              "description": "若模式非 COMPLEX_FIRST，說明覆蓋原因"
+            }
+          }
+        },
+        "state": {
+          "type": "string",
+          "enum": ["NORMAL", "PARTIAL", "CLARIFY", "ABORT", "LOOP"],
+          "description": "FEG 判定的最終狀態"
+        },
+        "state_reason": {
+          "type": "string",
+          "description": "狀態判定依據（若為 CLARIFY/ABORT/LOOP 必須填寫）"
+        },
+        "feg_c_syntax": {
+          "type": "string",
+          "description": "FEG-C 語法的完整輸出（用於調試和審計）"
+        },
+        "vm_flag": {
+          "type": "boolean",
+          "default": false,
+          "description": "多域模式 flag（VM 存在 = true）"
+        },
+        "fallback_strategy": {
+          "type": "string",
+          "enum": ["ONE_AT_A_TIME", "SERIAL_BEST_EFFORT", "ASK_USER", "ABORT"],
+          "description": "降級策略"
+        }
+      }
+    },
+    "routing_instructions": {
+      "type": "object",
+      "description": "給 strat-orchestrator 的路由指示",
+      "properties": {
+        "process_mode": {
+          "type": "string",
+          "enum": ["FULL_STRAT", "ANCHOR_ONLY", "ANCHOR_FORGE", "DIRECT"],
+          "description": "每個域的處理模式（取決於域碼）"
+        },
+        "skip_drill_for": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "哪些域跳過 Drill 階段"
+        },
+        "max_retries": {
+          "type": "integer",
+          "default": 2,
+          "minimum": 1,
+          "maximum": 3
+        },
+        "timeout_per_domain_ms": {
+          "type": "integer",
+          "default": 30000,
+          "description": "每個域的最大處理時間"
+        }
+      }
+    },
+    "audit": {
+      "type": "object",
+      "properties": {
+        "feg_parse_time_ms": {"type": "integer"},
+        "domains_detected_count": {"type": "integer"},
+        "ambiguity_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "輸入模糊度（0=完全明確, 1=完全模糊）"
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "handoff_version": "1.0",
+      "timestamp": "2026-07-06T15:30:00Z",
+      "feg_output": {
+        "detected_domains": [
+          {"code": "D_B", "label": "翻譯", "confidence": 0.95, "trigger_keywords": ["翻譯", "英文"]},
+          {"code": "D_C", "label": "對話", "confidence": 0.7, "trigger_keywords": ["最近", "怎麼樣"]},
+          {"code": "D_A", "label": "分析", "confidence": 0.6, "trigger_keywords": ["分析", "寫完了嗎"]}
+        ],
+        "priority_chain": {
+          "mode": "COMPLEX_FIRST",
+          "order": ["D_A", "D_B", "D_C"]
+        },
+        "state": "NORMAL",
+        "vm_flag": true,
+        "fallback_strategy": "ONE_AT_A_TIME",
+        "feg_c_syntax": "FEG{ D{A,B,C} VM }\n|->{snapshot}\nRULES{ PRIORITY: COMPLEX_FIRST FALLBACK: ONE_AT_A_TIME(VM) }\nSTATES{ NORMAL WHEN ALL_DONE }"
+      },
+      "routing_instructions": {
+        "process_mode": "FULL_STRAT",
+        "skip_drill_for": ["D_C"],
+        "max_retries": 2,
+        "timeout_per_domain_ms": 30000
+      },
+      "audit": {
+        "feg_parse_time_ms": 45,
+        "domains_detected_count": 3,
+        "ambiguity_score": 0.35
+      }
+    }
+  ]
+}

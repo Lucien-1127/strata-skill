@@ -1,7 +1,7 @@
 ---
 name: hermes-skill-author
 description: Author Hermes SKILL.md files with quality scoring.
-version: 0.1.0
+version: 0.2.0
 author: Hermes
 metadata:
   hermes:
@@ -29,6 +29,31 @@ metadata:
 - `skill_manage` tool available in the Hermes agent.
 - `skill_view` for reading existing skills.
 - `skills_list` for checking existing skill names (避免重名).
+
+## 標準：金鑰管理（跨技能共同約定）
+
+所有調用外部 API 的技能**必須**遵循模組化 `.env` 模式，金鑰不可寫入 SKILL.md 或硬編碼在腳本中。
+
+```
+~/.hermes/env/
+├── agnes.env        # Agnes API key
+├── deepseek.env     # DeepSeek API key
+├── freellmapi.env   # FreeLLM API key
+└── telegram.env     # Telegram bot token
+```
+
+腳本讀取金鑰的標準做法（適用於 cron 環境，不依賴 `.bashrc`）：
+```python
+ENV_PATH = os.path.expanduser("~/.hermes/env/<provider>.env")
+key = ""
+if os.path.isfile(ENV_PATH):
+    with open(ENV_PATH) as f:
+        for line in f:
+            m = re.match(r'^\s*<VAR_NAME>=(.*)$', line.strip())
+            if m: key = m.group(1).strip("\"'")
+```
+
+Prerequisites 段落應寫「金鑰在 `~/.hermes/env/<provider>.env`」，不可貼真實金鑰。
 
 ## How to Run
 
@@ -139,8 +164,10 @@ Bad  (133): A comprehensive skill for authoring Hermes SKILL.md files that inclu
 | 🚫 禁止詞 | 出現 powerful/seamless/robust 每詞扣 0.5 |
 | 📝 author 正確 | author 非 `Hermes` 扣 1.0 |
 | 🎯 可重用性 | 內容是一次性對話記錄而非抽象步驟扣 2.0 |
+| 🔐 金鑰安全 | 內容含 `sk-`、`cpk-`、`api_key=明文` 等模式扣 3.0（一票否決） |
 
 **FINAL_SCORE** = 5.0 - sum(deductions)
+**SECURITY_OVERRIDE**：若 🔐 金鑰安全維度扣分 > 0，無論總分多少，一律標記 FAIL，不允許寫入。
 
 **Grade**: A ≥ 4.5 / B ≥ 3.5 / C ≥ 2.5 / D < 2.5
 
@@ -167,6 +194,7 @@ Bad  (133): A comprehensive skill for authoring Hermes SKILL.md files that inclu
 | **G5 Tool framing** | 全文掃描 cat/grep/ls/sed/awk 並確認非在程式碼區塊內 | 無違規出現 |
 | **G6 段落完整性** | 檢查必要段落是否存在 | When to Use + Prerequisites + Procedure + Verification |
 | **G7 可重用性** | 內容是否包含具體的檔案路徑/指令而非抽象步驟 | 適用於多種場景而非單一次 |
+| **G8 金鑰安全** | 全文掃描 `sk-`、`cpk-`、`api_key=` 等金鑰模式 | 無出現 → 通過；出現 → **FAIL：不允許寫入** |
 
 未通過的閘門標註 ⚠️，並自動觸發一輪 R4 修復。
 
@@ -269,6 +297,41 @@ skill_view(name="target-skill")  # 確認變更生效
 - 更新後務必重新驗證 FEG 壓縮是否仍正確對應新內容。
 - 若技能有互補技能（如 memory-policy ↔ memory-compression），更新一方後檢查另一方是否需要同步調整。
 
+### R9 — 技能腳本與 Cronjob 模式
+
+技能配上 `scripts/` 腳本 + `cronjob` 工具時，需考慮 Cron 執行環境的限制。
+
+**核心規則**：Cron job 在非互動 shell 中執行，**不 source `.bashrc` / `.profile`**。若腳本需要 API 金鑰，使用 `get_env_from_bashrc()` 模式：
+
+```python
+def get_env_from_bashrc(var_name):
+    import re
+    try:
+        with open(f"{__import__('os').path.expanduser('~')}/.bashrc") as f:
+            for line in f:
+                m = re.match(rf'\s*export\s+{var_name}=["\']?(.+?)["\']?\s*$', line)
+                if m: return m.group(1)
+    except: pass
+    return ""
+```
+
+**watchdog 模式（no_agent=True）**：
+- 對於純資料收集/門檻檢查（非 LLM 推理需求），使用 `no_agent=True`
+- 腳本 stdout 直接作為 cron 交付內容 — 設計腳本使輸出直接可讀
+- 腳本 stdout 為空 = 無變化 = 不發送（靜默模式）
+- 適合：API 端點存活檢查、磁碟/記憶體用量、rate limit 監控、變更偵測
+
+**輕量監控偏好**：當用戶要求監控/狀態檢查，優先選擇 `no_agent=True` cron + 腳本，而非獨立技能。省 tokens、省 LLM 調用、交付更即時。
+
+| 模式 | 適用 | 優點 |
+|:-----|:-----|:-----|
+| `no_agent=True` + script | 純檢查、純監控 | 零 token 消耗、即時交付 |
+| `no_agent=False` + prompt | 需推理（摘要、篩選、判斷） | LLM 可分析後再報告 |
+
+**迭代陷阱**：
+- Cron 腳本放置於 `~/.hermes/scripts/`，透過 `cronjob(script="filename.py")` 引用，**不可用絕對路徑**。
+- 腳本失敗時 cron 會自動報告錯誤 — 不需要手動處理 `try/except` 的 fallback 訊息（除非要優雅的降級提示）。
+
 ## Pitfalls
 
 - **description 是最大陷阱**：這是最常違規的規則。每次寫入前必須用 G1 確認 ≤60 字元。
@@ -278,6 +341,8 @@ skill_view(name="target-skill")  # 確認變更生效
 - **過大的 scripts 要分離**：超過 30 行的 Python/Shell 腳本應獨立為 `scripts/` 檔案，用 `skill_manage(action='write_file')` 寫入。
 - **從既有技能學習**：建立前先用 `skill_view` 查看結構相似的技能（特別是 `prompt-factory-7-1` 和 `strat-*` 系列），避免重複造輪子或自創不一致的命名/格式。
 - **跨技能 FEG 一致性**：若新技能使用 FEG 壓縮，必須引用 `prompt-factory-7-1/references/feg-core-dsl.md` 作為共享參考，不允許獨立定義 FEG 語法。
+- **金鑰禁止嵌入技能內容**：API 金鑰 (`sk-`、`cpk-` 等) **永遠不允許**寫在 SKILL.md 中。改用模組化 `.env` 模式：金鑰存於 `~/.hermes/env/{provider}.env`，腳本從該路徑讀取。`.bashrc` 統一 source 全部。金鑰檔案不得進入 git repo。
+- **Script 分離 + 金鑰路徑**：技能若附帶 Python 腳本，必須從 `~/.hermes/env/` 讀取金鑰（透過讀取對應 `.env` 檔案），不可硬編碼或從 `os.environ` 直接依賴，後者在 cron 環境中不 work。
 
 ## Verification
 

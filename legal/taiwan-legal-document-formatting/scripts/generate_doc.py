@@ -52,6 +52,23 @@ TRACKS = {
 }
 
 
+def _apply_paragraph_protection(p, keep_next=False):
+    """Apply OxmlElement keepLines + optional keepNext for orphan prevention.
+    
+    This mirrors the SKILL.md SOP Step 2 requirements:
+    - keepLines: prevents page break inside a paragraph
+    - keepNext: keeps this paragraph with the next one (for headings)
+    """
+    from docx.oxml import OxmlElement
+    pPr = p._element.get_or_add_pPr()
+    for tag in ['w:keepLines']:
+        el = OxmlElement(tag)
+        pPr.append(el)
+    if keep_next:
+        el = OxmlElement('w:keepNext')
+        pPr.append(el)
+
+
 def set_font(run, font_name, size=None, bold=False):
     """設定 run 的東亞字型"""
     run.font.name = font_name
@@ -91,6 +108,8 @@ def make_doc(track, title, content_lines, output):
     p = doc.add_paragraph(title)
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     set_font(p.runs[0], cfg['font'], cfg['title_size'], bold=True)
+    _apply_paragraph_protection(p, keep_next=True)
+    p.paragraph_format.keep_with_next = True
 
     doc.add_paragraph('')  # 空行
 
@@ -112,6 +131,8 @@ def make_doc(track, title, content_lines, output):
             indent = 3  # 1. 2. 3. 縮排6字
 
         p = doc.add_paragraph(text)
+        p.paragraph_format.widow_control = True
+        _apply_paragraph_protection(p)
         if indent > 0:
             p.paragraph_format.left_indent = Cm(indent * 0.7)  # 每級約0.7cm
 

@@ -38,7 +38,10 @@ flowchart TD
     G2 --> H
     H -->|有 ❌| I[修正後重新生成]
     I --> E
-    H -->|全部 ✅| J[交付檔案到使用者對話]
+    H -->|全部 ✅| L[strat-drill<br>模型委員會審計]
+    L --> M{燈號閘門 C}
+    M -->|🟢 PASS| J[交付檔案到使用者對話]
+    M -->|🔴 FAIL| I
     J --> K[確認使用者已收到]
 ```
 
@@ -75,6 +78,37 @@ for tag in ['w:keepLines', 'w:keepNext']:
 libreoffice --headless --convert-to pdf input.docx
 ```
 
+**⚠️ CJK 空白末頁陷阱（2026-07-07 實戰發現）**
+LibreOffice 在轉換 CJK 文件時，有時會在末尾多產生一頁空白頁（pdftotext 可偵測為「0 lines / EMPTY」）。這是 LibreOffice 的 CJK 分頁演算法問題，非 DOCX 本身的錯誤。
+
+**偵測與修復：**
+
+```bash
+# 偵測：用 pdftotext 檢查末頁
+pdftotext output.pdf - | python3 -c "
+import sys
+pages = sys.stdin.read().split('\f')
+last = pages[-1]
+lines = [l.strip() for l in last.split('\n') if l.strip()]
+if not lines:
+    print('BLANK PAGE DETECTED')
+"
+
+# 修復：用 pypdf 移除末頁
+python3 -c "
+from pypdf import PdfReader, PdfWriter
+r = PdfReader('output.pdf')
+last_text = r.pages[-1].extract_text().strip()
+if len(last_text) < 20:  # 空白頁偵測
+    w = PdfWriter()
+    for i in range(len(r.pages) - 1):
+        w.add_page(r.pages[i])
+    with open('output.pdf', 'wb') as f:
+        w.write(f)
+    print(f'Removed blank last page. Now {len(w.pages)} pages.')
+"
+```
+
 ### 步驟 4：QA 閘門 — 必須派子代理
 
 **禁止**跳過此步驟。PDF 產出後必須**立即**並行派遣兩個子代理：
@@ -92,10 +126,40 @@ delegate_task(tasks=[
 ])
 ```
 
-### 步驟 5：修正或交付
+### 步驟 5：模型委員會審計（strat-drill）+ 燈號閘門 C
 
-- 全部 ✅ → 執行步驟 6
-- 有 ❌ → 修正程式碼 → 回到步驟 2（重新生成）
+QA 雙子代理結果回來後：
+
+| QA 結果 | 行動 |
+|:-------:|:-----|
+| 有 ❌ | 修正程式碼 → 回到步驟 2（重新生成並重新走 QA） |
+| 全部 ✅ | **強制**接續下方模型委員會審計 |
+
+**模型委員會審計程序（強制，不可跳過）：**
+
+```bash
+# 載入 strat-drill 技能執行模型委員會審計
+skill_view(name="strat-drill")
+
+# 使用 audit-checklist-20260707.md 逐項檢查
+skill_view(name="strat-drill", file_path="references/audit-checklist-20260707.md")
+skill_view(name="strat-drill", file_path="references/model-committee-alias.md")
+```
+
+審計檢查面向：
+1. 🔴 **硬錯誤** — MOICA網址、條號混淆、學說掛法條源、無字號實務見解（任一❌即退回）
+2. 🟡 **品質檢查** — 用語中立性、結論先行、引用完整性
+3. 🟢 **格式檢查** — 末頁密度、免責聲明、G3 格式統一
+
+**燈號閘門 C：**
+
+| 燈號 | 條件 | 行動 |
+|:----:|:------|:------|
+| 🟢 **通過** | 無🔴錯誤 + 🟡≤2 項 | 進入步驟 6（交付） |
+| 🟡 **有條件** | 無🔴錯誤 + 🟡3~4 項 | 補充後再審 |
+| 🔴 **退回** | 有🔴錯誤 | 回到步驟 2 修正 |
+
+> ⚠️ **實戰教訓（2026-07-07）**：強制險§7/§29引用時看似簡單的條文仍會出錯（省略「向保險人」「特別補償基金」）。**永遠不要相信記憶中的條文**——即使剛從 law.moj.gov.tw 取得，抄入附錄時仍應逐字比對原文。常見陷阱：省略修飾語、濃縮要件、選擇性引用未加註。
 
 ### 步驟 6：🚨 強制交付檔案到使用者對話
 
@@ -238,6 +302,7 @@ SOP 步驟 2 的 python-docx 防孤行設定已在頂部 SOP 中詳述。
 - `references/預告登記關鍵判決.md` — 5 則最高法院/高等法院預告登記判決摘要
 - `references/預告登記內政部函釋.md` — 12 則內政部地政司函釋分類整理
 - `references/預告登記學說研究.md` — 王澤鑑、謝在全、黃茂榮、温豐文、陳立夫 5 位學者研究
+- `references/車禍肇事責任分析框架.md` — 車禍法律分析報告 10 章結構模板（情境→違規→路權→信賴原則→肇責→刑事→賠償→流程→和解→自救），適用於一般大眾向的法律指南撰寫
 
 ### 基礎模板
 
@@ -450,6 +515,13 @@ flowchart LR
 
 ## Pitfalls
 
+- ❌ **2026-07-07：Python-docx 項目符號切頁（最嚴重 — 遭用戶嚴厲糾正）** — 使用 `List Bullet` 樣式時，若未對每個 bullet item 設定 `w:keepLines` 和 `w:keepNext`，Word/LibreOffice 可能將項目符號留在頁尾而把內容推到下一頁。**絕對不可以**讓 bullet 符號在上一頁、內容在下一頁。修正原則：每個 bullet item 都開 `keepLines` + `keepNext`；只有 bullet list 的最後一項才關閉 `keepNext`（避免綁死後續內容）。詳見步驟 2 之 python-docx 防孤行範例。
+- ❌ **2026-07-07：LibreOffice CJK 空白末頁未檢查** — LibreOffice 轉換 CJK 文件時常在末尾多一頁空白。使用 `pypdf` 的 `PdfReader` 檢查末頁文字量，若 `< 20 chars` 則用 `PdfWriter` 跳過末頁重新寫入。見步驟 3 的「CJK 空白末頁陷阱」修復腳本。
+- ❌ **2026-07-07：跳過 QA 閘門直接交付** — DOCX→PDF 完成後**不得直接交付**。強制走完完整流程：QA 排版審計(子代理A) → QA 引用審計(子代理B)（兩者並行）→ strat-drill 模型委員會審計 → 燈號閘門 C（🟢通過才交付）。
+- ❌ **2026-07-07：強制險§7/§29 引用遺漏修飾語** — 引用強制汽車責任保險法時，§7 的「向保險人」「向特別補償基金」等修飾語容易被省略，§29 的酒精濃度門檻容易被濃縮。**不要信任記憶中的條文** — 即使剛從 law.moj.gov.tw 取得，抄入附錄時仍應逐字比對原文。選擇性引用須加註。
+- ❌ **2026-07-07：判例已不再援用但未註明** — 最高法院74年台上字第4219號判例雖仍為實務廣泛援引，但已於103年度被決議不再援用。引用任何判例時，若知其效力狀態，必須在首次引用處加註。
+- ❌ **2026-07-07：§284後段（過失重傷）告訴屬性誤標** — 依刑法§287，過失傷害罪（含重傷）係告訴乃論，而非非告訴乃論。引用告訴屬性時**必須查刑法§287但書確認**，不可憑一般常識推斷。
+- ❌ **2026-07-07：「殘廢給付」未改為「失能給付」** — 強制汽車責任保險法§27已將殘廢給付修正為失能給付。引用時必須使用現行法正式用語。
 - ❌ 法院書狀禁用 `Noto` 系列字型（非標準法院用字）
 - ❌ 政府公文日期格式：民國年，如「中華民國 115 年 7 月 7 日」
 - ❌ 合約金額寫法不可只用阿拉伯數字
@@ -463,6 +535,6 @@ flowchart LR
 - ❌ **上市櫃法條延伸過度** — 一般土地借款預告登記不必拉到證交法§20/§171
 - ❌ **報告完成後遺忘歸檔** — 每次產出後先問自己：這個文件屬於哪個儲存庫？
 - ❌ **PDF 段落切頁未檢查** — DOCX 轉 PDF 後必須用 `pdftotext` 或視覺檢查確認段落未被不合理切分（特別是標題單獨在頁尾、判決從中間切開）。在 python-docx 生成時對標題段落設 `keep_with_next = True`，對全段落設 `widow_control = True`，並對需要防止分頁的段落用 OxmlElement 加 `w:keepLines` 和 `w:keepNext`。
-- ❌ **檔案存好後忘記發送給使用者** — 這是最常見的錯誤。PDF/DOCX 產出並歸檔後，**必須在當下回應中把檔案送到使用者的對話視窗**，而不是只存到儲存庫然後說「檔案在X路徑」。使用者看不到伺服器路徑。發送後應主動確認使用者是否收到，不得假設已送達。
-- ❌ **用 text_to_speech 傳送非音訊檔案** — `text_to_speech` 工具會把檔案轉成語音。傳送 PDF 或其他文件時必須直接用平台檔案傳輸機制，不可繞道語音工具。
+- ❌ **檔案存好後忘記發送給使用者** — 這是最常見的錯誤。PDF/DOCX 產出並歸檔後，**必須在當下回應中把檔案送到使用者的對話視窗**，而不是只存到儲存庫然後說「檔案在X路徑」。
+- ❌ **用 text_to_speech 傳送非音訊檔案** — `text_to_speech` 工具會把檔案轉成語音。傳送 PDF 或其他文件時必須直接用平台檔案傳輸機制。
 - ❌ **使用者說「可」後未確認就繼續下一步** — 有時使用者的「可」是對前置步驟的確認，不是對下一個動作的授權。若有模糊空間，應先明確詢問再行動。

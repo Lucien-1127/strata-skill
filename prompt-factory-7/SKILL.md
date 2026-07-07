@@ -1,6 +1,7 @@
 ---
 name: prompt-factory-7
 description: prompt-factory-7
+description: "終極提示詞工廠 7.0 — 自動生成高品質提示詞"
 ---
 # prompt-factory-7
 

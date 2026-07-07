@@ -1,6 +1,7 @@
 ---
 name: video-ai-architect-v3
 description: video-ai-architect-v3
+description: "影片 AI 提示詞架構師（動態分層版）v3.0"
 ---
 # video-ai-architect-v3
 

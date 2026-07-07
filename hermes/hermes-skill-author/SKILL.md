@@ -1,7 +1,7 @@
 ---
 name: hermes-skill-author
 description: Author Hermes SKILL.md files with quality scoring.
-version: 0.2.0
+version: 0.4.0
 author: Hermes
 metadata:
   hermes:
@@ -165,6 +165,7 @@ Bad  (133): A comprehensive skill for authoring Hermes SKILL.md files that inclu
 | 📝 author 正確 | author 非 `Hermes` 扣 1.0 |
 | 🎯 可重用性 | 內容是一次性對話記錄而非抽象步驟扣 2.0 |
 | 🔐 金鑰安全 | 內容含 `sk-`、`cpk-`、`api_key=明文` 等模式扣 3.0（一票否決） |
+| 📛 description=name | description 等於 name（去大小寫/標點後）扣 2.0 |
 
 **FINAL_SCORE** = 5.0 - sum(deductions)
 **SECURITY_OVERRIDE**：若 🔐 金鑰安全維度扣分 > 0，無論總分多少，一律標記 FAIL，不允許寫入。
@@ -195,6 +196,7 @@ Bad  (133): A comprehensive skill for authoring Hermes SKILL.md files that inclu
 | **G6 段落完整性** | 檢查必要段落是否存在 | When to Use + Prerequisites + Procedure + Verification |
 | **G7 可重用性** | 內容是否包含具體的檔案路徑/指令而非抽象步驟 | 適用於多種場景而非單一次 |
 | **G8 金鑰安全** | 全文掃描 `sk-`、`cpk-`、`api_key=` 等金鑰模式 | 無出現 → 通過；出現 → **FAIL：不允許寫入** |
+| **G9 Description 有意義** | 檢查 `description` 是否等於 `name`（去除大小寫與標點差異後比對） | description 不等於 name → 通過 |
 
 未通過的閘門標註 ⚠️，並自動觸發一輪 R4 修復。
 
@@ -236,19 +238,7 @@ PIT:{陷阱濃縮}
 ```
 
 **FEG-L3 實例 — HARDLINE_RULES → FEG_CORE_EXTREME 映射**：
-```
-FEG_CORE_EXTREME[
-D{FRONT,DESC,NAME,TOOLS,SECT,BAN,AUTH,REUSE};
-S1..5;
-P:FRONT>=5&DESC>=5&NAME>=5&TOOLS>=5&SECT>=5&BAN>=5&AUTH>=5&REUSE>=5;
-R:FRONT<5|DESC<5|NAME<5|TOOLS<5|SECT<5|BAN<5|AUTH<5|REUSE<5;
-Dg:BAN<4&REUSE<4;
-C:TOOLS<3|SECT<3;
-B:BAN<3|REUSE<3|SF|BH|QF;
-M:P>DLV;R>RTY(max=2);Dg>SAFE;C>ASK;B>STOP
-]
-```
-> 維度映射：FRONT=Frontmatter / DESC=description / NAME=name格式 / TOOLS=Hermes-tool / SECT=段落 / BAN=禁止詞 / AUTH=author / REUSE=可重用性
+```\nFEG_CORE_EXTREME[\nD{FRONT,DESC,NAME,TOOLS,SECT,BAN,AUTH,REUSE,KEY,DNAME};\nS1..5;\nP:FRONT>=5&DESC>=5&NAME>=5&TOOLS>=5&SECT>=5&BAN>=5&AUTH>=5&REUSE>=5&KEY>=5&DNAME>=5;\nR:FRONT<5|DESC<5|NAME<5|TOOLS<5|SECT<5|BAN<5|AUTH<5|REUSE<5|KEY<5|DNAME<5;\nDg:BAN<4&REUSE<4&KEY<4;\nC:TOOLS<3|SECT<3;\nB:KEY<3|BAN<3|REUSE<3|SF|BH|QF;\nM:P>DLV;R>RTY(max=2);Dg>SAFE;C>ASK;B>STOP\n]\n```\n> 維度映射：FRONT=Frontmatter / DESC=description / NAME=name格式 / TOOLS=Hermes-tool / SECT=段落 / BAN=禁止詞 / AUTH=author / REUSE=可重用性 / KEY=金鑰安全 / DNAME=description≠name
 
 FEG 三層級（詳見 `feg-core-dsl.md`）：
 
@@ -332,9 +322,53 @@ def get_env_from_bashrc(var_name):
 - Cron 腳本放置於 `~/.hermes/scripts/`，透過 `cronjob(script="filename.py")` 引用，**不可用絕對路徑**。
 - 腳本失敗時 cron 會自動報告錯誤 — 不需要手動處理 `try/except` 的 fallback 訊息（除非要優雅的降級提示）。
 
+### R10 — 敏感技能加密模式
+
+當技能內容涉及安全架構（注入防禦、偵測邏輯、繞過手法等），不應以明文推上公開 repo。使用 GPG 雙檔策略：
+
+```
+remote (GitHub):          SKILL.md.gpg     ← AES256 加密
+local (~/.hermes/skills/): 
+  SKILL.md                ← 解密後明文，被 .gitignore 排除
+  SKILL.md.gpg            ← 同步 remote，還原源
+```
+
+**執行流程：**
+
+```bash
+# 1. 建立技能（明文 SKILL.md）
+skill_manage(action="create", name="skill-name", content="...")
+
+# 2. 生成金鑰並加密
+KEY=$(python3 -c "import secrets; print(secrets.token_urlsafe(32))")
+gpg --symmetric --batch --passphrase "$KEY" --cipher-algo AES256 \
+  --output SKILL.md.gpg SKILL.md
+
+# 3. 金鑰存入 env（.gitignore 會排除）
+echo "SKILL_DECRYPT_KEY=$KEY" >> ~/.hermes/env/<skill-name>.key
+chmod 600 ~/.hermes/env/<skill-name>.key
+
+# 4. 明文加入 .gitignore
+echo "security/<skill-name>/SKILL.md" >> .gitignore
+
+# 5. 推 .gpg 上 remote，金鑰留在本機
+git add security/<skill-name>/SKILL.md.gpg .gitignore
+git commit -m "feat: add <skill-name> skill (encrypted)"
+```
+
+**注意**：金鑰是本機的單點故障。建議另備份至 GCP Secret Manager 或 age 加密後存離線媒介。
+
+| 安全原則 | 實作 |
+|:---------|:------|
+| remote 永不存明文 | ✅ 只推 SKILL.md.gpg |
+| 金鑰不進 git | ✅ env/ 在 .gitignore |
+| Hermes 可載入 | ✅ 本機留 SKILL.md（被 gitignore） |
+| 可還原 | ✅ 本機 .gpg 副本作為 restore point |
+
 ## Pitfalls
 
 - **description 是最大陷阱**：這是最常違規的規則。每次寫入前必須用 G1 確認 ≤60 字元。
+- **description = name 是批量匯入留下的通病**：從外部系統（Copilot prompts、知識庫）大量匯入技能時，易留下 frontmatter description = 技能名稱的缺陷。2026-07-07 審計發現 75/120 技能有此問題。建立技能後務必用 G9 確認；批量修復方式見 `references/bulk-description-fix.md`。
 - **author 不可從環境讀取**：永遠寫 `Hermes`。不要從 `whoami`、git config、或 OS username 取得。
 - **FEG 壓縮不可破壞 SKILL.md 結構**：壓縮版僅供快速參照，不可作為寫入 skill_manage 的內容。
 - **不要寫 router/index hub skill**：hub skill 只指向其他 skill 是無效的。
@@ -343,6 +377,8 @@ def get_env_from_bashrc(var_name):
 - **跨技能 FEG 一致性**：若新技能使用 FEG 壓縮，必須引用 `prompt-factory-7-1/references/feg-core-dsl.md` 作為共享參考，不允許獨立定義 FEG 語法。
 - **金鑰禁止嵌入技能內容**：API 金鑰 (`sk-`、`cpk-` 等) **永遠不允許**寫在 SKILL.md 中。改用模組化 `.env` 模式：金鑰存於 `~/.hermes/env/{provider}.env`，腳本從該路徑讀取。`.bashrc` 統一 source 全部。金鑰檔案不得進入 git repo。
 - **Script 分離 + 金鑰路徑**：技能若附帶 Python 腳本，必須從 `~/.hermes/env/` 讀取金鑰（透過讀取對應 `.env` 檔案），不可硬編碼或從 `os.environ` 直接依賴，後者在 cron 環境中不 work。
+- **內容萃取而非原文搬運**：當技能素材來自外部文件（小說、推演研究、長篇報告、超長網頁等），只萃取其**邏輯架構與映射關係**，不將原文段落大段貼入 SKILL.md。技能是「怎麼做」的指引，不是「原文是什麼」的存檔。用戶曾明確糾正：「你不能把整個提示放上去，你要去把它純邏輯。」
+- **加密技能的金鑰管理**：使用 R10 加密模式時，金鑰以 `~/.hermes/env/<name>.key` 存放。這是單點故障。建議立即備一份至 GCP Secret Manager，或至少確認 `.gitignore` 有排除該金鑰檔。
 
 ## Verification
 

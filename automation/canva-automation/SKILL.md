@@ -191,6 +191,8 @@ POST /v1/oauth/token
 - ❌ **初次授權必須瀏覽器互動**：OAuth PKCE 無法完全無頭化。解決方案：一次性授權取得 refresh_token 後儲存
 - ❌ **MCP Server 不能操作 API**：Canva Dev MCP Server 是開發輔助工具（查文件/UI Kit），不是 Connect API 執行層
 - ❌ **Scope 不自動繼承**：`asset:write` 不包含 `asset:read`，每個 scope 必須明確宣告
+- ❌ **選擇正確的整合類型**：Canva Developer Portal 有兩種整合 — **Canva Apps**（編輯器內嵌，需前端程式碼+翻譯）和 **Connect API**（後端 REST API，僅需 Client ID+Secret）。千萬別選錯，否則會看到「代碼上傳」「Translations」等無關設定頁面。
+- ✅ **Redirect URI 可掛現有 nginx**：不需 ngrok 或另開伺服器。在既有 server block 加 `location = /canva-callback { ... }` 即可接收授權碼。用戶授權後複製瀏覽器網址列（含 `?code=xxx`）貼回。詳見 `references/oauth-callback-nginx.md`。
 - ✅ **refresh_token 永續**：一次性使用，每次換新會給新的 refresh_token
 - ✅ **非同步作業需輪詢**：上傳/匯出/autofill 都是非同步，需輪詢 jobId
 - ✅ **OpenAPI Spec 可生成 client SDK**：`canva.dev/sources/connect/api/latest/api.yml` 可用 openapi-generator

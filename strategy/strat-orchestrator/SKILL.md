@@ -1,7 +1,7 @@
 ---
 name: strat-orchestrator
 description: Dispatch tasks to Anchor/5D/Drill/Forge modules.
-version: 0.1.0
+version: 0.2.0
 author: Hermes
 metadata:
   hermes:
@@ -124,14 +124,66 @@ state_snapshot:
 
 ## Quick Reference
 
-| 輸入類型 | 路由目標 | 流程 |
-|---------|---------|------|
-| 分析/比較 | Anchor→5D→Drill→Forge | 完整四階段 |
-| 生成/規劃 | Anchor→Forge | 簡化流程 |
-| 重寫/優化 | Anchor→Drill→Forge | 先檢核再鍛造 |
-| 快速諮詢 | Anchor→Forge（精簡版） | 最短路徑 |
+| 輸入類型 | FEG 域碼 | 路由目標 | 流程 |
+|---------|:-------:|---------|------|
+| 分析/比較 | D_A | Anchor→5D→Drill→Forge | 完整四階段 |
+| 文件摘要/提取 | D_D | Anchor→5D→Drill→Forge | 歸入 D_A |
+| 生成/規劃/創作 | D_G | Anchor→Forge | 簡化流程 |
+| 翻譯 | D_B | Anchor→Forge | 簡化流程（歸入 D_G 路由） |
+| 重寫/優化/編輯 | D_E | Anchor→Drill→Forge | 先檢核再鍛造 |
+| 對話/諮詢 | D_C | Anchor（Forge 可選） | 輕量路由，見 D_C 規則 |
+| 問答/定義/查詢 | D_F | 直接回答 | 不進 STRAT |
 
 ## Procedure
+
+### 0. FEG 路由預篩（S0_FEG）
+
+在任務分類前，若輸入包含以下任一信號，先載入 `decision-graph-router` 執行 FEG 解析：
+- 單次輸入中偵測到 2 個以上請求意圖（VM_MULTI ≥ 2）
+- 輸入模糊、難以判斷屬於哪個任務類型
+- 用戶明確說「用 FEG 判斷」
+
+**FEG 輸出 → Orchestrator 接收格式：**
+```
+域碼:    D_X          (對應下方任務分類表)
+任務類型: str
+優先級:  [1, 2, 3...] (多意圖時排序)
+狀態:    NORMAL | PARTIAL | CLARIFY | ABORT
+```
+
+**FEG 狀態路由：**
+| 狀態 | Orchestrator 行為 |
+|:----:|:-----------------|
+| NORMAL | 取 D_X 映射至任務分類，繼續 S1 |
+| PARTIAL | 標記已識別域，說明未識別部分，繼續 S1 |
+| CLARIFY | 回問用戶 2-3 個確認問題，停止本輪流程 |
+| ABORT | 拒絕執行，記錄事件，返回安全響應 |
+
+**FEG 域碼 → 任務類型映射：**
+```
+D_A 分析  → 分析/比較       → 完整四階段（含 Drill）
+D_B 翻譯  → 生成路由        → Anchor→Forge（跳 Drill，歸入 D_G）
+D_C 對話  → 輕量路由        → 僅 Anchor（Forge 可選，見下方 D_C 規則）
+D_D 文件  → 歸入 D_A        → 完整四階段（前置 read_file）
+D_E 編輯  → 重寫/優化       → Anchor→Drill→Forge
+D_F 問答  → 直接回答        → 不進 STRAT
+D_G 生成  → 生成/規劃/翻譯  → Anchor→Forge（跳 Drill）
+```
+
+> 單一明確意圖的日常任務可跳過 S0_FEG，直接進入第 1 步「任務分類」。
+
+**D_C 對話模式（Forge 可選觸發規則）**
+
+D_C 路由預設終止於 Anchor，直接輸出「綜合判斷」段落。
+以下任一條件成立時，自動接續 Forge：
+
+| 條件 | 說明 | 升級目標 |
+|:----:|:-----|:--------:|
+| 用戶要求結構化輸出 | 含「報告/整理/摘要/給我一份」等詞 | D_C + Forge |
+| 建議行動 ≥ 3 項 | Anchor 綜合判斷段過長，超出對話級 | D_C + Forge |
+| 任一 5D 維度 ≤ 2 | 存在明確風險，需 Drill 介入 | 自動升級為 D_A |
+
+條件均不成立：回覆 Anchor「綜合判斷」一行，附燈號即完成。
 
 ### 1. 任務分類
 
@@ -241,6 +293,7 @@ Orchestrator 依照當前狀態與風險等級決定執行路徑：
 - **δ3 閾值僵化**：δ3 的三維評分閾值應根據任務類型動態調整。分析型任務的「可行性」閾值應高於創意型任務。
 - **S3 退回死循環**：若 S3 連續退回合 >2 次，停止循環 → 標記 🔴 並交付「部分完成 + 已知限制」報告，而非無限重試。
 - **δ 校驗層自身安全**：校驗邏輯不接受 Markdown 或自由文字輸入。輸入必須為預定義 JSON 結構，防止校驗層被注入。
+- **S0_FEG 誤觸發**：日常單一明確意圖任務不需要進 FEG。僅在 VM_MULTI ≥ 2、輸入模糊、或用戶明確要求時才載入 decision-graph-router。
 
 ## Verification
 

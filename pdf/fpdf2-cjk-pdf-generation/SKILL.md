@@ -2,6 +2,7 @@
 name: fpdf2-cjk-pdf-generation
 description: Generate CJK PDFs with fpdf2 avoiding overlap.
 version: 0.3.0
+state: inactive
 author: Hermes
 platforms: [linux]
 tags:

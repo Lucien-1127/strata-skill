@@ -1,0 +1,94 @@
+{
+  "version": 1,
+  "installed": {
+    "writing-plans": {
+      "source": "skills.sh",
+      "identifier": "skills-sh/jnMetaCode/superpowers-zh/skills/writing-plans",
+      "trust_level": "community",
+      "scan_verdict": "safe",
+      "content_hash": "sha256:debecd3c7219ef1f",
+      "install_path": "strategy/writing-plans",
+      "files": [
+        "SKILL.md",
+        "plan-document-reviewer-prompt.md"
+      ],
+      "metadata": {
+        "detail_url": "https://skills.sh/jnMetaCode/superpowers-zh/skills/writing-plans",
+        "repo_url": "https://github.com/jnMetaCode/superpowers-zh"
+      },
+      "installed_at": "2026-07-07T09:06:58.746142+00:00",
+      "updated_at": "2026-07-07T09:06:58.746158+00:00"
+    },
+    "subagent-driven-development": {
+      "source": "skills.sh",
+      "identifier": "skills-sh/jnMetaCode/superpowers-zh/skills/subagent-driven-development",
+      "trust_level": "community",
+      "scan_verdict": "safe",
+      "content_hash": "sha256:3b97cd5154194234",
+      "install_path": "strategy/subagent-driven-development",
+      "files": [
+        "SKILL.md",
+        "code-quality-reviewer-prompt.md",
+        "implementer-prompt.md",
+        "spec-reviewer-prompt.md"
+      ],
+      "metadata": {
+        "detail_url": "https://skills.sh/jnMetaCode/superpowers-zh/skills/subagent-driven-development",
+        "repo_url": "https://github.com/jnMetaCode/superpowers-zh"
+      },
+      "installed_at": "2026-07-07T09:07:03.554425+00:00",
+      "updated_at": "2026-07-07T09:07:03.554440+00:00"
+    },
+    "verification-before-completion": {
+      "source": "skills.sh",
+      "identifier": "skills-sh/jnMetaCode/superpowers-zh/skills/verification-before-completion",
+      "trust_level": "community",
+      "scan_verdict": "safe",
+      "content_hash": "sha256:4166fe3e72efffa4",
+      "install_path": "research/verification-before-completion",
+      "files": [
+        "SKILL.md"
+      ],
+      "metadata": {
+        "detail_url": "https://skills.sh/jnMetaCode/superpowers-zh/skills/verification-before-completion",
+        "repo_url": "https://github.com/jnMetaCode/superpowers-zh"
+      },
+      "installed_at": "2026-07-07T09:07:07.671734+00:00",
+      "updated_at": "2026-07-07T09:07:07.671749+00:00"
+    },
+    "dispatching-parallel-agents": {
+      "source": "skills.sh",
+      "identifier": "skills-sh/jnMetaCode/superpowers-zh/skills/dispatching-parallel-agents",
+      "trust_level": "community",
+      "scan_verdict": "safe",
+      "content_hash": "sha256:a289bb32f879311d",
+      "install_path": "strategy/dispatching-parallel-agents",
+      "files": [
+        "SKILL.md"
+      ],
+      "metadata": {
+        "detail_url": "https://skills.sh/jnMetaCode/superpowers-zh/skills/dispatching-parallel-agents",
+        "repo_url": "https://github.com/jnMetaCode/superpowers-zh"
+      },
+      "installed_at": "2026-07-07T09:07:21.112222+00:00",
+      "updated_at": "2026-07-07T09:07:21.112237+00:00"
+    },
+    "executing-plans": {
+      "source": "skills.sh",
+      "identifier": "skills-sh/jnMetaCode/superpowers-zh/skills/executing-plans",
+      "trust_level": "community",
+      "scan_verdict": "safe",
+      "content_hash": "sha256:47c44a6607530864",
+      "install_path": "strategy/executing-plans",
+      "files": [
+        "SKILL.md"
+      ],
+      "metadata": {
+        "detail_url": "https://skills.sh/jnMetaCode/superpowers-zh/skills/executing-plans",
+        "repo_url": "https://github.com/jnMetaCode/superpowers-zh"
+      },
+      "installed_at": "2026-07-07T09:07:25.303215+00:00",
+      "updated_at": "2026-07-07T09:07:25.303230+00:00"
+    }
+  }
+}

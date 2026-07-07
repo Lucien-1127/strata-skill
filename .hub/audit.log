@@ -1,0 +1,7 @@
+2026-07-07T09:06:26Z BLOCKED hermes-skills clawhub:community caution 2_findings
+2026-07-07T09:06:58Z INSTALL writing-plans skills.sh:community safe sha256:debecd3c7219ef1f
+2026-07-07T09:07:03Z INSTALL subagent-driven-development skills.sh:community safe sha256:3b97cd5154194234
+2026-07-07T09:07:07Z INSTALL verification-before-completion skills.sh:community safe sha256:4166fe3e72efffa4
+2026-07-07T09:07:21Z INSTALL dispatching-parallel-agents skills.sh:community safe sha256:a289bb32f879311d
+2026-07-07T09:07:25Z INSTALL executing-plans skills.sh:community safe sha256:47c44a6607530864
+2026-07-07T09:08:25Z BLOCKED writing-skills clawhub:community dangerous 8_findings

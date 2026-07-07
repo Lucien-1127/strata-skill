@@ -1,13 +1,7 @@
 # Skills — exclude non-skill directories
 /.git/
-/hermes-agent/
-/hermes-custom-providers/
-/hermes-memory-setup/
-/hermes-multi-skill-arch/
-/hermes-research-report/
-/hermes-skill-prompt-arch/
-/hermes-system-diagnostics/
 /.hermes/
+/.usage.json
 /agent-cognition-arch/
 /agnes-image-generator/
 /agnes-quota-router/
@@ -36,6 +30,13 @@
 /google-cloud-ai/
 /gothic-chibi-prompts/
 /guagua-15s-prompt/
+/hermes-agent/
+/hermes-custom-providers/
+/hermes-memory-setup/
+/hermes-multi-skill-arch/
+/hermes-research-report/
+/hermes-skill-prompt-arch/
+/hermes-system-diagnostics/
 /image-prompt-architect/
 /jimeng-short-video/
 /kanban-orchestrator/
@@ -90,4 +91,4 @@
 /zh-tw-system-prompt/
 /zh-tw-translator/
 /zhiyan-agent/
-/.usage.json
+security/keter-prompt-defense/SKILL.md

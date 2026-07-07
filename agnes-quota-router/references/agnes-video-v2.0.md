@@ -39,12 +39,27 @@
 - 圖生圖 extra_body.image 是陣列 (URL 或 Base64 Data URI)
 - Base64 Data URI → 影片 API 不接受! 必須用文生圖輸出的公開 URL
 
-## Pipeline (已實測)
+---
+## Pipeline (已實測) — 查詢結果欄位更新
+
 文生圖 (agnes-image-2.1-flash) → platform-outputs URL
 → POST /v1/videos image=該URL (圖生影)
 → 輪詢 /agnesapi?video_id=<ID> 直到 status=completed
-→ 結果影片在 remixed_from_video_id (非 url 欄位)
+
+**實測發現 (2026-07-06)**：
+- ✅ 結果影片在 `url` 欄位（實際下載連結）
+- ❌ `remixed_from_video_id` 此次測試為 `null`，**不要依賴**
+- 正確取得方式：`data.get("url", "") or data.get("remixed_from_video_id", "")`
 
 ## 輸出格式
-創建任務: { task_id, video_id, status:"queued" }
-查詢結果: { status:"completed", remixed_from_video_id:"https://..." }
+
+```json
+{
+  "id": "video_xxxxxx",
+  "status": "completed",
+  "url": "https://platform-outputs.agnes-ai.space/videos/.../video_xxxxxx.mp4",
+  "remixed_from_video_id": null,
+  "seconds": "4.7",
+  "size": "1088x832"
+}
+```

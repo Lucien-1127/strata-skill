@@ -1,7 +1,7 @@
 ---
 name: agnes-prompt-architect
 description: Unified prompt architecture for Agnes image + video generation
-version: 1.0.0
+version: 1.1.0
 author: Hermes
 metadata:
   hermes:
@@ -160,6 +160,73 @@ platforms: [linux]
 
 ---
 
+## 圖生影角色一致性架構（新增）
+
+這是 Agnes Video V2.0 最關鍵也最容易被忽略的維度。圖生影的模型會以輸入圖片為起始幀，但如果 prompt 和 negative_prompt 沒有刻意約束，角色會在 5 秒內漸漸漂移。
+
+### 三層結構
+
+```
+┌─ Layer 1: 保留層 (Preserve) ──────────── 角色特徵完全不動
+│   髮型、五官、服裝、體型、顏色
+│   ※ 在 prompt 中明確說 "same character, identical appearance"
+│   ※ 在 negative_prompt 中封鎖所有角色改變
+│
+├─ Layer 2: 動態層 (Animate) ───────────── 指定什麼要動
+│   頭髮飄動、眼神變化、微笑、麥克風位置
+│   ※ 只描述最小必要 motion
+│   ※ 不要一次要求太多動作
+│
+└─ Layer 3: 場景層 (Scene) ─────────────── 背景/燈光/運鏡
+    舞台燈光變化、煙霧流動、鏡頭運動
+    ※ 場景變化較安全，角色較不易受影響
+```
+
+### Motion 最小主義原則
+
+| 原則 | 說明 |
+|:----|:------|
+| 🎯 **動越少越好** | 只動頭髮 vs 全身跳舞 → 前者成功率更高 |
+| 📝 **說清楚什麼不動** | "keeping face, hair, outfit identical to input image" |
+| 🚫 **負面詞必須加** | 不加 → 角色八成會跑掉 |
+| 🔄 **seed 固定** | 同 seed 可復現，但角色仍可能漂移 |
+| 📐 **比例鎖死** | 圖生影設跟原圖一致的 width/height |
+
+### 角色保留負面提示詞（模板）
+
+這是**最重要但最容易漏掉**的。所有圖生影呼叫必須包含：
+
+```
+# 角色保留（必要）
+different character, face change, identity change, face morphing,
+different hairstyle, different outfit, appearance drift,
+character mutation, swapped identity, face distortion,
+inconsistent character
+
+# 品質（通用）
+ugly, deformed, bad anatomy, blurry, jittery, distorted, low quality
+```
+
+### 圖生影 Prompt 建議結構
+
+```
+[場景/氛圍描述], maintaining the character's identity,
+face, hairstyle, and outfit exactly as shown in the reference image
+```
+
+搭配明確的 `image` 參數（單字串 URL）和上述負面提示詞。
+
+### 常見失敗模式
+
+| 失敗模式 | 徵兆 | 解法 |
+|:--------|:-----|:------|
+| 角色變不同人 | 臉部結構改變 | 加強負面詞 + 明確 "keep face identical" |
+| 角色變形扭曲 | 身體比例跑掉 | 加 "body distortion, bad anatomy" |
+| 角色逐漸漂移 | 5 秒內漸變 | 縮短時長 + 加強保留提示 |
+| 角色完全消失 | 場景吞掉角色 | 降低場景變動幅度 |
+
+---
+
 ## 圖生圖/圖生影專用規則
 
 **固定模板結構**，適用於所有基於輸入圖片的生成：
@@ -180,9 +247,11 @@ Transform {要改的內容} while preserving {要保留的內容}
 ```
 文生圖 → platform-outputs URL
        → POST /v1/videos image=該URL
-       → 輪詢 /agnesapi?video_id=<ID>
-       → result.remixed_from_video_id
+       → 輪詢 /agnesapi?video_id=<ID>&model_name=agnes-video-v2.0
+       → result.url（注意是 url 欄位，不是 remixed_from_video_id！）
 ```
+
+⚠️ **URL 欄位陷阱**：輪詢回應中影片連結在 `url` 欄位，`remixed_from_video_id` 常為 null。取值用 `data.get("url", "") or data.get("remixed_from_video_id", "")`。
 
 ---
 
@@ -229,7 +298,8 @@ Transform {要改的內容} while preserving {要保留的內容}
 4. 確認草稿包含全部維度（圖片8/影片10），未填者佔位符
 5. 表情符號 ≤2，只用 ✨🎨🤔💡✅🎉🚀📋
 6. 圖生圖/影確保「保留什麼」與「改什麼」都寫清楚
-7. 最終輸出無佔位符
+7. 圖生影檢查：角色保留負面詞✔️、motion 最小化✔️、比例與原圖一致✔️
+8. 最終輸出無佔位符
 
 ## Pitfalls
 
@@ -239,6 +309,10 @@ Transform {要改的內容} while preserving {要保留的內容}
 - **圖生圖不需要 tags: ["img2img"]**
 - **錨點不要跳躍**：每輪只能有一個主要錨點，不要同時追問多個不相關維度
 - **影片幀數限制**：num_frames ≤ 441 且必須 8n+1
+- **圖生影 URL 欄位**：輪詢回應用 `data.get("url", "")`，不是 `remixed_from_video_id`
+- **角色保留負面詞不可省略**：所有圖生影必須加角色保留負面詞，否則角色漂移
+- **Motion 描述要精準**：只描述「什麼要動」，不必過度描述「場景細節」— 後者靠圖片本身提供
+- **輪詢 timeout 設 600 秒**：Agnes 影片渲染約 60-90 秒/場景，300 秒常 timeout
 
 ## Verification
 
@@ -263,6 +337,12 @@ print('✅ Video prompt includes motion')
 
 - `agnes-quota-router/references/agnes-image-2.1-flash.md` — Image API 細節
 - `agnes-quota-router/references/agnes-video-v2.0.md` — Video API 細節
+- `img2vid-character` — 圖生影角色一致性提示詞（角色不跑掉的關鍵）
 - `agnes-quota-router/SKILL.md` — 路由與金鑰管理
+- `idol-video-pipeline/SKILL.md` — 角色影片流水線（含 4 階段審核流程與實測腳本）
+- `references/idol-concert-example.md` — 偶像演唱會提示詞完整範例（含 4 場景腳本、負面詞、參數對照）
 - `media-pipeline/SKILL.md` — 自動化流水線執行引擎
 - `media-pipeline/scripts/pipeline.py` — Python 執行腳本（金鑰從 env 讀取，不在 repo 內）
+- `media-pipeline/scripts/idol-video.py` — 角色參考圖→影片專用腳本
+- `media-pipeline/scripts/pipeline-concat.py` — 多場景 ffmpeg 串接腳本
+- ~~`video-ai-architect-v3`~~ — 已合併至此技能

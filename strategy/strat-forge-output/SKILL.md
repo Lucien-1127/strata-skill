@@ -1,7 +1,7 @@
 ---
 name: strat-forge-output
 description: Forge final output plus format specifications.
-version: 0.1.0
+version: 0.1.1
 author: Hermes
 metadata:
   hermes:
@@ -213,9 +213,9 @@ fallback:                       # 失敗時的降級輸出格式
 | **E2** | 任務理解偏差 | 解決了錯誤的問題 | 回 Anchor 重新錨定 |
 | **E3** | 上下文不足 | 結論超越已知資訊範圍 | 標記信心 + 新增缺口 |
 | **E4** | 過度推論 | 推測寫成事實 | 加上 ⚠️ 或 🔴 標記 |
-| **E5** | 違反限制 | 輸出包含禁止內容 | 過濾 + 重寫 |
+| **E5** | 違反限制 | 輸出包含禁止內容 | 過濾 + 重新套用模板 |
 | **E6** | 漏答欄位 | 部分必填欄位空白 | 補填或標記 N/A |
-| **E7** | 交接失真 | Anchor→Drill→Forge 之間資訊遺失 | 回驗狀態快照 |
+| **E7** | 交接失真 | Anchor→Drill→Forge 之間資訊遺失 | 回驗 Anchor 狀態快照，重新錨定 |
 
 > E7 是最難發現的錯誤。資訊在模組間傳遞時可能被簡化、扭曲或遺漏。解決方案：每個模組的輸出嵌入原始輸入摘要，供下一個模組對照。
 
@@ -275,9 +275,13 @@ pipeline:
       type: "retry"
       max_attempts: 2
       error_map:
-        E1: "reformat"
-        E2: "reanchor"
-        E3-E7: "amend_and_remark"
+        E1: "reformat"           # 格式錯誤 → 套用正確模板
+        E2: "reanchor"           # 任務理解偏差 → 回 Anchor 重新錨定
+        E3: "amend_and_remark"   # 上下文不足 → 標記信心 + 新增缺口
+        E4: "amend_and_remark"   # 過度推論 → 加上 ⚠️ 或 🔴 標記
+        E5: "reformat"           # 違反限制 → 過濾 + 重新套用模板
+        E6: "amend_and_remark"   # 漏答欄位 → 補填或標記 N/A
+        E7: "reanchor"           # 交接失真 → 回驗 Anchor 快照，重新錨定
         
     - id: "redeploy"
       type: "deliver"
@@ -291,7 +295,8 @@ pipeline:
 - **格式統一優先於創意**：所有輸出必須通過 Output Spec 品質閘門。創意表現在內容深度而非格式變化。
 - **信心標記不可遺漏**：推論處沒標記比推論錯誤更嚴重 — 前者誤導，後者可校正。
 - **交付模式不可主動觸發**：只有當用戶明確說「請交付」或「請給最終版本」時才產出交付物。
-- **E7 交接失真**：模組間傳遞資訊時，只傳結論不傳前提。每個模組的輸出應嵌入 1-2 句原始輸入摘要，讓下一模組可對照。
+- **E7 交接失真**：模組間傳遞資訊時，只傳結論不傳前提。每個模組的輸出應嵌入 1-2 句原始輸入摘要，讓下一模組可對照。E7 修正方向是 reanchor（退回 Anchor 對照快照），不是 amend_and_remark。
+- **E5 違反限制**：此類錯誤根因是輸出格式或內容不符規範，修正方向是 reformat（重新套用模板過濾），不是語義層的 amend_and_remark。
 - **契約過度約束**：Output Contract 的 `prohibited_patterns` 和 `required_sections` 應根據任務類型動態調整。分析型禁用某些水話是合理的；創意型過度約束反而扼殺產出。
 - **評估模式錯配**：語義型評估應只用於邏輯一致性檢查，不應用於格式檢查。格式檢查永遠是規則型的職責。
 - **版本爆炸**：七項元件都版本化聽起來完整，但實務上每次輸出都版本化太重。只記錄「實際改變的元件」的版本 — V1-V7 是選單，不是清單。

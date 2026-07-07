@@ -26,11 +26,12 @@ flowchart TD
     B -->|法院| C1[cwTeXKai 14pt<br>邊距2.5cm]
     B -->|政府| C2[AR PL UKai TW 12pt<br>左裝訂線]
     B -->|合約| C3[Noto Sans CJK TC 12pt]
-    C1 --> D[python-docx 生成]
+    C1 --> D[python-docx 生成<br>widow_control/keepLines]
     C2 --> D
     C3 --> D
     D --> E[LibreOffice 轉 PDF]
-    E --> F{QA 閘門<br>並行派發2子代理}
+    E --> E0[bash 驗證<br>pdfinfo/pdffonts/ls]
+    E0 --> F{QA 閘門<br>並行派發2子代理}
     F -->|子代理A| G1[排版檢查<br>字型/邊距/孤行/切頁]
     F -->|子代理B| G2[引用檢查<br>判決/學說/函釋/格式]
     G1 --> H{結果彙整}
@@ -288,6 +289,13 @@ doc.save('/tmp/output.docx')
 ```bash
 libreoffice --headless --convert-to pdf /tmp/output.docx
 # 輸出為 /tmp/output.pdf
+```
+
+### 依賴安裝
+
+```bash
+pip3 install "python-docx>=1.1.0"  # widow_control / OxmlElement keepLines 需此版本
+sudo apt-get install -y fonts-cwtex-kai fonts-cwtex-ming fonts-arphic-ukai fonts-arphic-uming libreoffice-writer-nogui
 ```
 
 ### PDF 產出驗證步驟

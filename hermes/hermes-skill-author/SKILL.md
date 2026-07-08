@@ -15,6 +15,7 @@ metadata:
 不包含通用提示詞生成 — 這僅用於 Hermes `skill_manage` 技能製作。
 
 **擴展用法**：如需將外部研究文檔深度整合至既有技能（非從零建立），參見 `references/deep-doc-integration.md`。
+**技能架構設計**：每份 SKILL.md 可同時承載 Hook / State Machine / FEG 三種模式，詳見 `references/architecture-patterns.md`。
 
 ## When to Use
 

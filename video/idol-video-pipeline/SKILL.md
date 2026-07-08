@@ -1,7 +1,7 @@
 ---
 name: idol-video-pipeline
 description: 角色參考圖→影片流水線，四階段審核制
-version: 1.0.0
+version: 1.1.0
 author: Hermes
 platforms: [linux]
 metadata:
@@ -99,10 +99,40 @@ metadata:
 - `media-pipeline/scripts/pipeline-concat.py` — 通用多場景串接腳本
 
 ## Pitfalls
-- ❌ 不要先用 img2img 預處理角色圖 — 角色會被 AI 改動
-- ❌ 不要用 `remixed_from_video_id` — 用 `url` 欄位
-- ❌ 不要在主對話中同步跑 — 用 delegate_task
-- ❌ 503 錯誤必須重試（指數退避）
-- ✅ 一定要加角色保留負面提示詞
-- ✅ 一定要設 9:16 比例 (576x1024)
-- ✅ 影片輪詢 timeout 設 600s
+
+### 🎯 角色不連貫（最常見失敗模式）
+每場景獨立文生圖 → 角色長相不同 → 串接後看不懂。
+**解法**：先產一張標準角色參考圖，所有場景共用同一張 `--ref-image`。
+核心原理：圖片鎖定角色外觀，影片提示詞**只描述動態**（img2vid-character 三層結構）。
+
+### ❌ 缺少 negative_prompt（角色漂移主因）
+圖生影若不加角色保留負面詞，角色會在 3-4 秒後開始漂移。
+`idol-video.py` 已自動加入，若自行呼叫 API 務必加：
+```json
+"negative_prompt": "different character, face change, identity change, face morphing, different body shape, different color, appearance drift, character mutation, inconsistent appearance, ugly, deformed, bad anatomy, blurry, jittery, distorted, low quality"
+```
+
+### ❌ 其他已知陷阱
+- 不要先用 img2img 預處理角色圖 — 角色會被 AI 改動
+- 不要用 `remixed_from_video_id` — 用 `url` 欄位
+- 不要在主對話中同步跑 — 用 delegate_task
+- 503 錯誤必須重試（指數退避）
+- ✅ Motion 越少越好：微動（頭髮飄）> 中動（走路）> 大動（跳舞）
+- ✅ 一定要設 9:16 比例 (576x1024) 或與 ref-image 一致
+- ✅ 影片輪詢 timeout 設 600s（idol-video.py 已預設）
+- ✅ 若角色仍漂移：縮短單段到 3 秒（81 幀），用更多片段串接
+- ✅ 串接用 `--crossfade` 比硬切更流暢
+
+### ⚠️ crossfade offset 公式陷阱
+`media-pipeline/scripts/idol-video.py` v1.0 的 crossfade offset 公式為 `i*duration-1`，這是**錯誤的**。正確公式為 `i*(duration-1)`。
+
+錯誤影響：ffmpeg 只輸出約 2 場景長度（8.7 秒而非 23.5 秒），後續場景被截斷。
+已於 2026-07-08 修正。若自行實作 xfade 串接，務必注意：
+```python
+# ❌ 錯誤（產出被截斷）
+offset = i * duration - 1
+
+# ✅ 正確（全長保留）
+offset = i * (duration - 1)
+```
+若想完全避開此 bug，不加 `--crossfade` 使用 concat demuxer（`-c copy`）串接，再於剪輯軟體手動加轉場，也是穩定的替代方案。

@@ -1,6 +1,7 @@
 ---
 name: hermes-custom-providers
 description: "Configure custom/third-party API providers (OpenAI-compatible) in Hermes, set up credential pooling with multiple keys, "
+status: stable
 ---
 # hermes-custom-providers
 

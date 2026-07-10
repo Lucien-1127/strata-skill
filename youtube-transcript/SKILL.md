@@ -1,6 +1,7 @@
 ---
 name: youtube-transcript
 description: "擷取與整理 YouTube 影片逐字稿"
+status: stable
 ---
 # youtube-transcript
 

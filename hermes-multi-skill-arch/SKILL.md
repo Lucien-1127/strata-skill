@@ -1,6 +1,7 @@
 ---
 name: hermes-multi-skill-arch
 description: "Hermes 多技能架構部署指南"
+status: stable
 ---
 # hermes-multi-skill-arch
 

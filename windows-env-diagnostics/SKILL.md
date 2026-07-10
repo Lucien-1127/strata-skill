@@ -1,6 +1,7 @@
 ---
 name: windows-env-diagnostics
 description: "Windows 環境診斷、開發工具調查、暫存清理與系統優化。從 git-bash/MSYS2 終端機執行的兼容操作。"
+status: stable
 ---
 # windows-env-diagnostics
 

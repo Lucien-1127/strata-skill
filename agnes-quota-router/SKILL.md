@@ -6,6 +6,7 @@ author: Hermes
 metadata:
   hermes:
     tags: [Agnes, Routing, Quota, Image, Video]
+status: stable
 ---
 
 # Agnes AI Token Plan 路由排程

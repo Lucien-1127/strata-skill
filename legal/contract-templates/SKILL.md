@@ -8,6 +8,7 @@ tags:
   - contract
   - template
   - taiwan
+status: stable
 ---
 
 # 合約範本庫

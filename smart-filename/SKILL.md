@@ -1,6 +1,7 @@
 ---
 name: smart-filename
 description: "Obsidian 智能檔名生成器"
+status: stable
 ---
 # smart-filename
 

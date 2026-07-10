@@ -7,6 +7,7 @@ platforms: [linux]
 metadata:
   hermes:
     tags: [Telegram, Mini-App, Dashboard, Hermes-Proxy, React, TypeScript]
+status: beta
 ---
 
 # Hermes Proxy Console — Telegram Mini App Dashboard

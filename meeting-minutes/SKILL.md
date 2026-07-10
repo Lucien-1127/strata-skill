@@ -1,6 +1,7 @@
 ---
 name: meeting-minutes
 description: "從口語逐字稿萃取結構化會議紀要與行動項目"
+status: stable
 ---
 # meeting-minutes
 

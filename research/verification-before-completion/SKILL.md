@@ -6,6 +6,7 @@ license: MIT
 metadata:
   hermes:
     tags: [quality, verification]
+status: stable
 ---
 
 # 完成前验证

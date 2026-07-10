@@ -6,6 +6,7 @@ author: Hermes
 metadata:
   hermes:
     tags: [Strategy, Memory, Policy, Compression]
+status: stable
 ---
 
 # 🧠 Memory Policy 記憶壓縮規則

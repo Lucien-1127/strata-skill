@@ -1,6 +1,7 @@
 ---
 name: web-clipper
 description: "網頁內容剪輯與知識內化，含 Mermaid 心智圖"
+status: stable
 ---
 # web-clipper
 

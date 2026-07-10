@@ -11,6 +11,7 @@ tags:
   - bge-m3
   - embedding
   - local-embedding-server
+status: stable
 ---
 
 # zhiyan-rag-infra

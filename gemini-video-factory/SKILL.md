@@ -1,6 +1,7 @@
 ---
 name: gemini-video-factory
 description: "Gemini 影片提示詞工廠"
+status: stable
 ---
 # gemini-video-factory
 

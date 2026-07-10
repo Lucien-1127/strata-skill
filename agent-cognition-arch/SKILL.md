@@ -1,6 +1,7 @@
 ---
 name: agent-cognition-arch
 description: "AI Agent 認知架構與提示詞工程實作"
+status: stable
 ---
 # agent-cognition-arch
 

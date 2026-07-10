@@ -6,6 +6,7 @@ license: MIT
 metadata:
   hermes:
     tags: [execution, planning]
+status: stable
 ---
 
 # 执行计划

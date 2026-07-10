@@ -1,6 +1,7 @@
 ---
 name: b2b-proposal
 description: "B2B 商業提案大綱生成器"
+status: stable
 ---
 # b2b-proposal
 

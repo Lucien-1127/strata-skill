@@ -1,6 +1,7 @@
 ---
 name: document-vector-search
 description: Build vector search over a markdown documentation repo using ChromaDB + any OpenAI-compatible embedding API. Covers multi-backend support, smart chunking by Markdown headers, incremental index updates, and frontmatter metadata preservation.
+status: stable
 ---
 
 # Document Vector Search

@@ -9,6 +9,7 @@ tags:
   - GitHub
   - Sync
   - Workflow
+status: stable
 ---
 
 # Git Sync Workflow
@@ -124,6 +125,7 @@ When `git push` fails with `could not read Username for 'https://github.com': No
 - **Default branch not `main`**: adjust the branch name (e.g. `master`, `develop`).
 - **Multiple remotes**: this skill assumes a single `origin`. Forks need a different remote name.
 - **Large repos**: `git fetch` may take 30+ seconds. Set `timeout` generously (60s).
+- **Skills-repo whitelist `.gitignore` trap**: When syncing `~/.hermes/skills/` to a version-controlled repo (e.g. `strata-skill`), a **whitelist-style `.gitignore`** (explicitly listing every tracked skill) silently excludes newly created skills from `git add`. Diagnosis: `git status --short` shows far fewer files than `find skills -type d | wc -l`. Fix: replace whitelist with a **blacklist** `.gitignore` that only excludes non-skill artifacts (`.git/`, `.usage.json`, `.archive/`, `__pycache__/`, `*.pyc`, OS files). After switching from whitelist to blacklist, expect 3-10× more files tracked (e.g. 33→348). Always verify with `git ls-files | wc -l` after the initial blacklist add.
 - **Embedded .git directory → submodule tracking**: When you `cp -r` or `rsync` a project into a monorepo and the source still has a `.git/` directory, `git add` tracks it as a **gitlink (submodule)** instead of regular files (mode `160000`). Fix:
   1. Remove the submodule reference: `git rm --cached <dir>`
   2. Delete the embedded `.git`: `rm -rf <dir>/.git`
@@ -149,3 +151,4 @@ Expected output:
 ## Linked References
 
 - `references/monorepo-add-external-project.md` — Full worked example of adding external projects (brand-site, Vite React Mini App) into a monorepo, including the embedded-.git submodule trap fix and non-interactive push credential diagnostics.
+- `templates/skills-repo-gitignore.txt` — Blacklist-style `.gitignore` for `~/.hermes/skills/` repos (avoids the whitelist trap that silently excludes new skills).

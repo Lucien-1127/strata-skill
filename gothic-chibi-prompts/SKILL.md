@@ -1,6 +1,7 @@
 ---
 name: gothic-chibi-prompts
 description: "哥德奇幻風 chibi 角色圖像提示詞"
+status: stable
 ---
 # gothic-chibi-prompts
 

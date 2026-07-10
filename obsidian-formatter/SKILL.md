@@ -1,6 +1,7 @@
 ---
 name: obsidian-formatter
 description: "Obsidian 排版美化與視覺優化"
+status: stable
 ---
 # obsidian-formatter
 

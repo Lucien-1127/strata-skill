@@ -6,6 +6,7 @@ license: MIT
 metadata:
   hermes:
     tags: [planning, documentation]
+status: stable
 ---
 
 # 编写计划

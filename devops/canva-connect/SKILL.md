@@ -8,6 +8,7 @@ metadata:
   hermes:
     tags: [canva, api, automation, design, oauth]
     related_skills: [idol-video-pipeline, img2vid-character]
+status: stable
 ---
 
 # Canva Connect API 整合

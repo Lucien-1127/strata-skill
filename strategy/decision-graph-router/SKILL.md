@@ -6,6 +6,7 @@ author: Hermes + 老闆
 metadata:
   hermes:
     tags: [Strategy, Decision, FEG, Routing, Multi-Agent]
+status: stable
 ---
 
 # 🔀 Decision Graph Router (FEG)

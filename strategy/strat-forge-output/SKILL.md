@@ -6,6 +6,7 @@ author: Hermes
 metadata:
   hermes:
     tags: [Strategy, Forge, Output, Format, Specification]
+status: stable
 ---
 
 # 🔨 Forge + Output Spec 最終鍛造與輸出規範

@@ -1,6 +1,7 @@
 ---
 name: rtckd-kernel
 description: "你自己的原創 DSL 核心架構 — RTCKD_KERNEL v6.4.3（ANCHOR/EVAL/BRIDGE/VISUAL/FLOW）"
+status: stable
 ---
 # rtckd-kernel
 

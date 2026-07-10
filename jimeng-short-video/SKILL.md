@@ -1,6 +1,7 @@
 ---
 name: jimeng-short-video
 description: "即夢 AI 短視頻提示詞框架"
+status: stable
 ---
 # jimeng-short-video
 

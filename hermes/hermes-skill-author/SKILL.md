@@ -6,6 +6,7 @@ author: Hermes
 metadata:
   hermes:
     tags: [Hermes, Skill, Authoring, Quality-Gate]
+status: stable
 ---
 
 # Hermes 技能工廠

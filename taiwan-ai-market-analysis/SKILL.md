@@ -1,6 +1,7 @@
 ---
 name: taiwan-ai-market-analysis
 description: "台灣 AI 接案市場分析報告"
+status: stable
 ---
 # taiwan-ai-market-analysis
 

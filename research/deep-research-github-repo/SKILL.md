@@ -7,6 +7,7 @@ platforms: [linux, macos]
 metadata:
   hermes:
     tags: [GitHub, Research, Architecture, Open-Source]
+status: stable
 ---
 
 # Deep Research of a GitHub Repository

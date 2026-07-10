@@ -6,6 +6,7 @@ author: Hermes
 metadata:
   hermes:
     tags: [STRATA, Memory, Compression, Progressive-Disclosure, Auto-Compress]
+status: stable
 ---
 
 # STRATA 記憶壓縮引擎

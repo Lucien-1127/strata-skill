@@ -1,6 +1,7 @@
 ---
 name: prompt-system-architect
 description: "對話式引導的提示詞系統設計專家"
+status: stable
 ---
 # prompt-system-architect
 

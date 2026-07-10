@@ -6,6 +6,7 @@ author: Hermes
 metadata:
   hermes:
     tags: [Strategy, Orchestrator, Routing, Dispatch]
+status: stable
 ---
 
 # 🎯 Orchestrator 策略總控

@@ -1,6 +1,7 @@
 ---
 name: kanban-worker
 description: "Pitfalls, examples, and edge cases for Hermes Kanban workers. The lifecycle itself is auto-injected into every worker's "
+status: beta
 ---
 # kanban-worker
 

@@ -1,6 +1,7 @@
 ---
 name: zhiyan-vm-setup
 description: A skill for configuring and maintaining the Zhiyan AI Legal System on a Google Cloud VM (Ubuntu 24.04). Covers system resource checks, swap setup, citation format updates, task router modifications, and service health verification.
+status: stable
 ---
 # Zhiyan VM Setup Skill
 

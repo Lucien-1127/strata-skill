@@ -2,6 +2,7 @@
 name: prompt-factory
 description: 終極提示詞工廠 v8.3——專業提示詞、Agent Skill 生成、評分、優化與協同架構設計系統。當使用者要求「幫我生成提示詞」「寫一個 prompt」「優化這個提示詞」「評分提示詞」「設計系統提示詞」「改進 prompt」「幫我寫個 AI 指令」「寫一個 agent 提示詞」「設計代理任務」「做一個 skill」「打包技能」「設計多代理編排」「orchestrator 提示詞」「協調多個代理/模型」「重構這個架構」「架構評審」「/architect」,或任何建立/修改/評估提示詞(prompt、系統指令、system prompt)與 Agent Skill(SKILL.md)的任務時,必須套用本技能。涵蓋十類任務模板(含 Agent Skill 製作、代理任務與多代理編排提示詞)、目標模型格式適配(Claude/GPT/本地模型)、PROMPT_EVALUATOR_V3.3 分級 checklist 評分(含 iron-laws H1–H3 合規性檢查)、變更 diff 與自動修復迭代、Co-Architect 協同架構師模式(條件觸發)。不適用於直接執行任務本身(如翻譯文章、分析資料)——該情況由守門規則轉問確認。
 related_skills: [iron-laws, feg-state-hook-architecture]
+status: beta
 ---
 
 # 終極提示詞工廠 8.3

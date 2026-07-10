@@ -1,6 +1,7 @@
 ---
 name: windows-automation
 description: "PowerShell automation on Windows: tool launchers, encoding handling, replacing CMD batch files."
+status: stable
 ---
 # windows-automation
 

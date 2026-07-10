@@ -1,6 +1,7 @@
 ---
 name: computer-use
 description: "Guide the agent through computer GUI interactions — screen reading, clicking, typing, and form filling on desktop environments."
+status: stable
 ---
 # computer-use
 

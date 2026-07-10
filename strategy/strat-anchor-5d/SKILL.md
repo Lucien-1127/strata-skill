@@ -6,6 +6,7 @@ author: Hermes
 metadata:
   hermes:
     tags: [Strategy, Anchor, Analysis, 5D]
+status: stable
 ---
 
 # ⚓ Anchor + 5D 語境錨定與五維研析

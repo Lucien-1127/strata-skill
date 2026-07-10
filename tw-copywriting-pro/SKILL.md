@@ -1,6 +1,7 @@
 ---
 name: tw-copywriting-pro
 description: "台灣爆款文案架構師（蝦皮/Threads 聯網版）"
+status: stable
 ---
 # tw-copywriting-pro
 

@@ -6,6 +6,7 @@ author: Hermes
 metadata:
   hermes:
     tags: [Strategy, Drill, Stress-Test, Red-Team]
+status: stable
 ---
 
 # 🔨 Drill 壓力檢核

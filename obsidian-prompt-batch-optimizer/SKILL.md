@@ -1,6 +1,7 @@
 ---
 name: obsidian-prompt-batch-optimizer
 description: "批量優化 Obsidian vault 內所有提示詞的腳本工具，保留 YAML frontmatter，使用 Hermes config 中的 DeepSeek API"
+status: stable
 ---
 # obsidian-prompt-batch-optimizer
 

@@ -4,6 +4,7 @@ description: Generate images via Agnes Image 2.1 Flash (text-to-image + image-to
 version: 2.0.0
 author: Hermes
 platforms: [linux]
+status: stable
 ---
 
 # Agnes Image 2.1 Flash — 圖片生成

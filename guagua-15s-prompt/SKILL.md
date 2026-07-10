@@ -1,6 +1,7 @@
 ---
 name: guagua-15s-prompt
 description: "呱呱 15 秒影片提示詞矩陣"
+status: stable
 ---
 # guagua-15s-prompt
 

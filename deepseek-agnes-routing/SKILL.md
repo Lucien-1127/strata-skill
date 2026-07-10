@@ -1,6 +1,7 @@
 ---
 name: deepseek-agnes-routing
 description: "DeepSeek V4 + Agnes 多模型路由策略研究"
+status: stable
 ---
 # deepseek-agnes-routing
 

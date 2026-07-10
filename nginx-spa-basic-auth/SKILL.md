@@ -4,6 +4,7 @@ description: Configure NGINX to serve a single-page application (SPA) behind bas
 version: 1.0.0
 author: Hermes Agent
 tags: [nginx, web-server, basic-auth, spa, reverse-proxy]
+status: stable
 ---
 # NGINX SPA Basic Auth Skill
 

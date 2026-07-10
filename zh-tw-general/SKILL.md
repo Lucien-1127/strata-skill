@@ -1,6 +1,7 @@
 ---
 name: zh-tw-general
 description: "繁體中文通用助手設定"
+status: stable
 ---
 # zh-tw-general
 

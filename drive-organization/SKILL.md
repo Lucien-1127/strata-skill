@@ -1,6 +1,7 @@
 ---
 name: drive-organization
 description: "Google Drive file organization, cleanup, and maintenance — scanning, dedup, moving, and bulk operations beyond the basic"
+status: stable
 ---
 # drive-organization
 

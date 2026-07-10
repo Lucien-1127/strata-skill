@@ -1,6 +1,7 @@
 ---
 name: windows-development-automation
 description: "Windows CMD/PowerShell automation for zh-TW systems: encoding, terminal config, scripting best practices"
+status: stable
 ---
 # windows-development-automation
 

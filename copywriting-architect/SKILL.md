@@ -1,6 +1,7 @@
 ---
 name: copywriting-architect
 description: "2026 爆款文案架構師 — 高效銷售文案生成"
+status: stable
 ---
 # copywriting-architect
 

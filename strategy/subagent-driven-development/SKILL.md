@@ -6,6 +6,7 @@ license: MIT
 metadata:
   hermes:
     tags: [agents, development]
+status: stable
 ---
 
 # 子智能体驱动开发

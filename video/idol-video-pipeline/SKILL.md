@@ -8,6 +8,7 @@ metadata:
   hermes:
     tags: [video, image, pipeline, anime, idol, workflow]
     related_skills: [media-pipeline, agnes-quota-router, img2vid-character, canva-connect]
+status: beta
 ---
 
 # 🎤 角色影片流水線 (Idol Video Pipeline)

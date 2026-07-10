@@ -1,6 +1,7 @@
 ---
 name: context-migration-summary
 description: "將對話脈絡、記憶、偏好打包成「AI 可繼承使用者檔案」— 用於跨模型遷移、Hermes 記憶初始化、RAG 使用者設定檔"
+status: stable
 ---
 # context-migration-summary
 

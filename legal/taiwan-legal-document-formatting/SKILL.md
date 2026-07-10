@@ -12,6 +12,7 @@ tags:
   - Contract
   - Government
   - QA
+status: stable
 ---
 
 # Taiwan Legal Document Formatting

@@ -1,6 +1,7 @@
 ---
 name: agnes-token-routing
 description: "Agnes AI Token Plan 路由排程"
+status: stable
 ---
 # agnes-token-routing
 

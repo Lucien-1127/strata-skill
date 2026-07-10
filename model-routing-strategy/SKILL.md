@@ -1,6 +1,7 @@
 ---
 name: model-routing-strategy
 description: FreeLLM API 路由配置、用量分析、Embedding 修復與平台金鑰審計
+status: stable
 ---
 
 # 🔀 模型路由與顧問策略

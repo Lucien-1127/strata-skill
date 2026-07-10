@@ -1,6 +1,7 @@
 ---
 name: hermes-memory-setup
 description: "評估、安裝、設定 Hermes Agent 的外部記憶 Provider（Honcho, Mem0, OpenViking, Hindsight 等 8 種）"
+status: stable
 ---
 # hermes-memory-setup
 

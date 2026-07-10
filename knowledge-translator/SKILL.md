@@ -1,6 +1,7 @@
 ---
 name: knowledge-translator
 description: "將內容轉譯為 Obsidian 專用結構化知識筆記"
+status: stable
 ---
 # knowledge-translator
 

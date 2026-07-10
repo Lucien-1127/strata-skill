@@ -1,6 +1,7 @@
 ---
 name: glossary-generator
 description: "從文件中自動萃取關鍵術語與概念詞彙表"
+status: stable
 ---
 # glossary-generator
 

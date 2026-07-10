@@ -13,6 +13,7 @@ triggers:
   - 修改 Mini App 前端原始碼（React/TSX）
   - 部署 Mini App 到 lucien126.com/m/
   - 報告「Mini App 修好了」之前強制執行
+status: stable
 ---
 
 # Mini App 部署工作流

@@ -1,6 +1,7 @@
 ---
 name: vertex-ai-web-integration
 description: "Integrate Google Cloud AI services (Gemini/Vertex AI) into web applications — authentication, API calls, and frontend integration."
+status: stable
 ---
 # vertex-ai-web-integration
 

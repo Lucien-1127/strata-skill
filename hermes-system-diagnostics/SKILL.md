@@ -10,6 +10,7 @@ metadata.hermes.tags:
 - Diagnostics
 - Recovery
 - Troubleshooting
+status: stable
 ---
 
 # Hermes System Diagnostics

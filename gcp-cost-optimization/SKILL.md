@@ -1,6 +1,7 @@
 ---
 name: gcp-cost-optimization
 description: "Analyze GCP billing, identify cost-saving opportunities, and implement resource right-sizing recommendations."
+status: stable
 ---
 # gcp-cost-optimization
 

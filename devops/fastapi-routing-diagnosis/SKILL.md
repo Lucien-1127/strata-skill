@@ -1,6 +1,7 @@
 ---
 name: fastapi-routing-diagnosis
 description: FastAPI 後端路由診斷與修復 — 假設驅動、最小修改、迴歸驗證
+status: stable
 ---
 
 # FastAPI 路由診斷

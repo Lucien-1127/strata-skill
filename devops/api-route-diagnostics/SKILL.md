@@ -1,6 +1,7 @@
 ---
 name: api-route-diagnostics
 description: FastAPI / 後端 API 路由層智慧診斷與修復 — 假設驅動診斷法，含強度路由與六步流程
+status: stable
 ---
 
 # API Route Diagnostics

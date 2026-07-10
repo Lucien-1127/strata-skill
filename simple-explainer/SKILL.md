@@ -1,6 +1,7 @@
 ---
 name: simple-explainer
 description: "將複雜概念用 5 歲幼兒能懂的方式解釋"
+status: stable
 ---
 # simple-explainer
 

@@ -1,6 +1,7 @@
 ---
 name: project-architecture-audit
 description: "Deep analysis of project codebases — architecture review, dependency verification, SDK compatibility checks, production-"
+status: stable
 ---
 # project-architecture-audit
 

@@ -7,6 +7,7 @@ platforms: [linux]
 metadata:
   hermes:
     tags: [Hermes, Dashboard, Self-Host, GitHub, Deployment]
+status: stable
 ---
 
 # Self-Host a Hermes Web Tool from GitHub

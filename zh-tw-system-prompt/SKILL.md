@@ -1,6 +1,7 @@
 ---
 name: zh-tw-system-prompt
 description: "台灣繁體中文 AI 助手系統提示詞（可做為 Hermes SOUL.md）"
+status: stable
 ---
 # zh-tw-system-prompt
 

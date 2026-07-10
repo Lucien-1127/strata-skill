@@ -2,6 +2,7 @@
 name: zhiyan-system-update
 description: Procedure for updating the Zhiyan AI Legal System on a GCP VM, including applying patches to citation policy, fixing G3引用格式, updating task router, and optionally creating swap.
 category: maintenance
+status: stable
 ---
 
 # Zhiyan AI Legal System Update Procedure

@@ -1,6 +1,7 @@
 ---
 name: taiwan-ai-projects-scanner
 description: "每日掃描全台外包平台（Tasker、PRO360、104高手、1111外包）的 AI 案源，產出 Telegram 精美報告"
+status: stable
 ---
 # taiwan-ai-projects-scanner
 

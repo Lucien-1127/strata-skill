@@ -1,6 +1,7 @@
 ---
 name: evergreen-note
 description: "為提示詞工程師產出深度專業的 Obsidian 長青筆記"
+status: stable
 ---
 # evergreen-note
 

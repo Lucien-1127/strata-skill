@@ -6,6 +6,7 @@ author: Hermes
 metadata:
   hermes:
     tags: [Memory, Mem0, Qdrant, Embedding]
+status: stable
 ---
 
 # 本機 Embeddings + Mem0 OSS 記憶架構

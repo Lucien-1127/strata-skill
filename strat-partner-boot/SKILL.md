@@ -1,6 +1,7 @@
 ---
 name: strat-partner-boot
 description: "高階提示詞架構師的策略對話管理系統 — 7 模組架構（錨點/5 維分析/角色切換/信心標記/決策備援）"
+status: beta
 ---
 # strat-partner-boot
 

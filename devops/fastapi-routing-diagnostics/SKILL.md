@@ -1,6 +1,7 @@
 ---
 name: fastapi-routing-diagnostics
 description: FastAPI 路由診斷與修復 SOP — 假設驅動診斷法，含 L1/L2/L3 思考強度路由
+status: stable
 ---
 
 # FastAPI Routing Diagnostics

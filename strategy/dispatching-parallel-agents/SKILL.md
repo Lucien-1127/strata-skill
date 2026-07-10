@@ -6,6 +6,7 @@ license: MIT
 metadata:
   hermes:
     tags: [agents, parallel]
+status: stable
 ---
 
 # 并行分派智能体

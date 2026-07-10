@@ -1,6 +1,7 @@
 ---
 name: fastapi-route-diagnosis
 description: 假設驅動診斷法 — 先驗證後修改的 FastAPI 路由問題排查流程，含強度路由表
+status: draft
 ---
 
 # FastAPI Route Diagnosis Protocol

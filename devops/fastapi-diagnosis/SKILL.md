@@ -4,6 +4,7 @@ description: "Systematic FastAPI route diagnosis with thinking-strength routing 
 version: 0.1.0
 author: Hermes Agent
 tags: [fastapi, diagnosis, routing, backend]
+status: stable
 ---
 
 # FastAPI Route Diagnosis

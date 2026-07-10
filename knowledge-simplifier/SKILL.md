@@ -1,6 +1,7 @@
 ---
 name: knowledge-simplifier
 description: "將專業知識簡化為國小六年級能理解的內容"
+status: stable
 ---
 # knowledge-simplifier
 

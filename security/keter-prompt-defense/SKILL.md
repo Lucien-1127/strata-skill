@@ -12,6 +12,7 @@ tags:
 related_skills:
   - deepseek-prompt-review
   - zhiyan-agent
+status: beta
 ---
 
 # KETER 提示詞注入防禦框架

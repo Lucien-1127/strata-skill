@@ -1,6 +1,7 @@
 ---
 name: prompt-industrial-system
 description: "Prompt 工業化生產系統 — 批量產出高品質提示詞"
+status: stable
 ---
 # prompt-industrial-system
 

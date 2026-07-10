@@ -1,6 +1,7 @@
 ---
 name: backend-api-diagnostics
 description: "假設驅動診斷法 — 對 FastAPI / 後端 API 服務進行路由層智慧診斷與修復"
+status: stable
 ---
 
 # Backend API Diagnostics

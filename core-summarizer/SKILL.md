@@ -1,6 +1,7 @@
 ---
 name: core-summarizer
 description: "從長文中精準萃取核心論點輸出極簡摘要"
+status: stable
 ---
 # core-summarizer
 

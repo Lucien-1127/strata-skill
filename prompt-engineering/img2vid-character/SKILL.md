@@ -8,6 +8,7 @@ metadata:
   hermes:
     tags: [video, prompt, character, consistency, img2vid]
     related_skills: [agnes-prompt-architect, idol-video-pipeline, agnes-quota-router]
+status: stable
 ---
 
 # 🎯 圖生影角色一致性 (img2vid-character)

@@ -1,6 +1,7 @@
 ---
 name: url-cleaner
 description: "自動清除網址中的追蹤參數"
+status: stable
 ---
 # url-cleaner
 

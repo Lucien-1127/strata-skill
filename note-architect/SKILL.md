@@ -1,6 +1,7 @@
 ---
 name: note-architect
 description: "Obsidian 筆記架構師角色設定"
+status: stable
 ---
 # note-architect
 

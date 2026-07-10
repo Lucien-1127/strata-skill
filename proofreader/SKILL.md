@@ -1,6 +1,7 @@
 ---
 name: proofreader
 description: "語法與格式精準校對，確保 Markdown 品質"
+status: stable
 ---
 # proofreader
 

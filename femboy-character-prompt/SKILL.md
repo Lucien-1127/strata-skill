@@ -1,6 +1,7 @@
 ---
 name: femboy-character-prompt
 description: "小男娘角色提示詞 — 角色設定與描寫"
+status: stable
 ---
 # femboy-character-prompt
 

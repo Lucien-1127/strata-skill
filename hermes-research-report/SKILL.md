@@ -1,6 +1,7 @@
 ---
 name: hermes-research-report
 description: "Hermes Agent 完全研究報告"
+status: stable
 ---
 # hermes-research-report
 

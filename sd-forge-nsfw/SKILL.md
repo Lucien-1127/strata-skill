@@ -1,6 +1,7 @@
 ---
 name: sd-forge-nsfw
 description: "透過本地 SD WebUI Forge 生成 NSFW 圖片，支援 DreamShaper 8 與 Realistic Vision V6"
+status: stable
 ---
 # sd-forge-nsfw
 

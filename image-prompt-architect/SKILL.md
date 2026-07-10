@@ -1,6 +1,7 @@
 ---
 name: image-prompt-architect
 description: "AI 圖像提示詞架構師系統指令"
+status: stable
 ---
 # image-prompt-architect
 

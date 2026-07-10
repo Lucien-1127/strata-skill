@@ -1,6 +1,7 @@
 ---
 name: gcp-vm-administration
 description: Administer and verify GCP VM state from within the VM itself. Covers the 'SSH trap', service health checks, disk verification, and SSH/GIT configuration.
+status: stable
 ---
 
 # GCP VM Administration

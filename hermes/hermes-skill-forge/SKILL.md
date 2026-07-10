@@ -7,6 +7,7 @@ platforms: [linux, macos, windows]
 metadata:
   hermes:
     tags: [Skill Forge, Automation, Self-Improvement]
+status: stable
 ---
 
 # Hermes Skill Forge

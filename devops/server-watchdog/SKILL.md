@@ -4,6 +4,7 @@ name: server-watchdog
 description: 使用 Hermes cronjob + no_agent 腳本建立伺服器程序 Watchdog — 零 token 消耗、自動偵測死亡/僵死並重啟，僅在異常時通知
 tags: [cronjob, watchdog, healthcheck, no-agent, server, monitoring]
 version: 1.0
+status: stable
 ---
 
 # Server Watchdog

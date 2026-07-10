@@ -1,6 +1,7 @@
 ---
 name: hermes-skill-prompt-arch
 description: "Hermes 多技能提示詞架構設計"
+status: stable
 ---
 # hermes-skill-prompt-arch
 

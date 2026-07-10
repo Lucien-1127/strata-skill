@@ -9,6 +9,7 @@ tags:
   - meta
   - guardrails
 related_skills: []
+status: stable
 ---
 
 # ⚖️ 三條鐵律（最高系統指令）

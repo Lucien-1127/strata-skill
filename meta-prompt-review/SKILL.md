@@ -1,6 +1,7 @@
 ---
 name: meta-prompt-review
 description: "像 Code Review 般精確診斷提示詞缺陷並產出優化版"
+status: stable
 ---
 # meta-prompt-review
 

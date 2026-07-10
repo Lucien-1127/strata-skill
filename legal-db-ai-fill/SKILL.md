@@ -1,6 +1,7 @@
 ---
 name: legal-db-ai-fill
 description: "批次填寫 Legal_DB_Full_Part1 試算表的 AI 欄位（白話摘要、實務爭點、關鍵字Tags、關聯條文），含品質修正工作流"
+status: stable
 ---
 # legal-db-ai-fill
 

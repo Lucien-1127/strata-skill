@@ -1,6 +1,7 @@
 ---
 name: social-post-converter
 description: "將筆記/文章轉化為各社群平台適用的貼文"
+status: stable
 ---
 # social-post-converter
 

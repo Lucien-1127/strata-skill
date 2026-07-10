@@ -7,6 +7,7 @@ triggers:
   - "user asks about integrating a third-party API/service"
   - "user wants to evaluate whether an external API can be used from Hermes"
   - "research the capabilities of a specific API platform"
+status: stable
 ---
 
 # API Integration Research

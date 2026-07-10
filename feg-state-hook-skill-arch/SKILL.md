@@ -6,6 +6,7 @@ author: Hermes
 metadata:
   hermes:
     tags: [Architecture, FEG, StateMachine, SkillDesign]
+status: draft
 ---
 
 # FEG / State Machine / Hook 技能嵌入架構

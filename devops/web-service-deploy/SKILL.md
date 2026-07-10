@@ -4,6 +4,7 @@ description: "Full lifecycle web service deployment: domain registration, DNS se
 version: 1.0.0
 author: Hermes Agent
 tags: [nginx, domain, ssl, deployment, dns, web-server]
+status: stable
 ---
 
 # Web Service Deploy

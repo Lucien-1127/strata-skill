@@ -1,6 +1,7 @@
 ---
 name: doc-toc
 description: "自動為長文生成階層式文件目錄"
+status: stable
 ---
 # doc-toc
 

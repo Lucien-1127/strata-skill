@@ -12,6 +12,7 @@ tags:
   - Layout
   - Noto-Font
   - G3-Citation
+status: stable
 ---
 
 # fpdf2 CJK PDF 排版指南（已棄用）

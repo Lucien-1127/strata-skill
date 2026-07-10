@@ -1,6 +1,7 @@
 ---
 name: zhiyan-agent
 description: "智研法律 AI Agent 系統設定"
+status: stable
 ---
 
 # zhiyan-agent

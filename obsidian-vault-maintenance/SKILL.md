@@ -1,6 +1,7 @@
 ---
 name: obsidian-vault-maintenance
 description: "Comprehensive Obsidian vault maintenance covering plugin diagnostics, configuration cleanup, frontmatter repair, and vau"
+status: stable
 ---
 # obsidian-vault-maintenance
 

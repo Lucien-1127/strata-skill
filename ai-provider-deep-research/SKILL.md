@@ -1,6 +1,7 @@
 ---
 name: ai-provider-deep-research
 description: "Comprehensive multi-source deep research methodology for AI providers, models, and APIs — cross-validation, structured r"
+status: stable
 ---
 # ai-provider-deep-research
 

@@ -2,6 +2,7 @@
 name: managing-hermes-legal-system
 description: Procedures for managing the Hermes-based Zhiyan AI Legal System on GCP VM — covering FreeLLM API, Nginx admin dashboard, Nginx auth, project file maintenance, system diagnostics, and running tests.
 category: devops
+status: stable
 ---
 
 # Managing Hermes-Based Zhiyan AI Legal System on GCP VM

@@ -9,6 +9,7 @@ metadata.hermes.tags:
 - Setup
 - Personalization
 - Memory
+status: stable
 ---
 
 # User Profile Setup

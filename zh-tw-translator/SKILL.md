@@ -1,6 +1,7 @@
 ---
 name: zh-tw-translator
 description: "將文本轉譯為自然道地的台灣繁體中文，保留 Markdown 格式"
+status: stable
 ---
 # zh-tw-translator
 

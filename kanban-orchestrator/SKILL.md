@@ -1,6 +1,7 @@
 ---
 name: kanban-orchestrator
 description: "Decomposition playbook + anti-temptation rules for an orchestrator profile routing work through Kanban. The 'don't do th"
+status: beta
 ---
 # kanban-orchestrator
 

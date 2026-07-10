@@ -1,6 +1,7 @@
 ---
 name: tri-extractor
 description: "「摘要」「重點」「心智圖」三合一內容萃取，從冗長內容中極速產出結構化結果"
+status: stable
 ---
 # tri-extractor
 

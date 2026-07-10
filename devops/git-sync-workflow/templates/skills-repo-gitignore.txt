@@ -1,0 +1,27 @@
+# Only exclude non-skill artifacts
+/.git/
+/.usage.json
+/.archive/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor temp files
+*.swp
+*.swo
+*~
+
+# Python cache and build artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+
+# Local config backups
+*.bak
+*.orig
+
+# Environment/credential files (these belong in ~/.hermes/env/, not the skills repo)
+.env*
+*.key

@@ -7,6 +7,7 @@ platforms: [linux]
 metadata:
   hermes:
     tags: [Animation, I2V, Prompt, Video, Character-Consistency]
+status: stable
 ---
 
 # AI 動畫工作流 v4.1 — 圖片先行的 I2V 流程 + 角色一致性

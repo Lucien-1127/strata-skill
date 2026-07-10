@@ -6,6 +6,7 @@ author: Hermes + 老闆
 metadata:
   hermes:
     tags: [STRATA, Architecture, Enterprise, AI-System, 4-Layer]
+status: beta
 ---
 
 # 💎 STRATA V13.0

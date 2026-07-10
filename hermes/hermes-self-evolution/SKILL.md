@@ -7,6 +7,7 @@ platforms: [linux]
 metadata:
   hermes:
     tags: [Self-Evolution, Optimization, DSPy, GEPA, Darwinian]
+status: stable
 ---
 
 # Hermes Agent Self-Evolution System

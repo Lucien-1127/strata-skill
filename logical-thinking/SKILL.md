@@ -1,6 +1,7 @@
 ---
 name: logical-thinking
 description: "邏輯思維分析與推理增強"
+status: stable
 ---
 # logical-thinking
 

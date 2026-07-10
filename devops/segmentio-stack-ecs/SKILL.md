@@ -7,6 +7,7 @@ platforms: [linux, macos, windows]
 metadata:
   hermes:
     tags: [AWS, ECS, Terraform, Docker, Infrastructure]
+status: stable
 ---
 
 # Segmentio Stack ECS Terraform Modules

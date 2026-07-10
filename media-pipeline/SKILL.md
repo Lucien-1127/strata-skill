@@ -7,6 +7,7 @@ platforms: [linux]
 metadata:
   hermes:
     tags: [FEG, State-Machine, Hooks, Video, Pipeline, Agnes, Automation]
+status: beta
 ---
 
 # Media Pipeline v3.0 — FEG + State Machine + Hooks 閉環

@@ -1,6 +1,7 @@
 ---
 name: google-cloud-ai
 description: "Integrate Google Cloud AI services (Gemini/Vertex AI) into Node.js and React full-stack apps. Covers @google/genai SDK s"
+status: stable
 ---
 # google-cloud-ai
 

@@ -1,6 +1,7 @@
 ---
 name: content-reducer
 description: "將內容精準減量 50%，保留核心"
+status: stable
 ---
 # content-reducer
 

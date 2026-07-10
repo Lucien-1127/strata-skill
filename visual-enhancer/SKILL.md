@@ -1,6 +1,7 @@
 ---
 name: visual-enhancer
 description: "用 Emoji 裝飾增強視覺閱讀體驗"
+status: stable
 ---
 # visual-enhancer
 

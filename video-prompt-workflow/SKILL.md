@@ -1,6 +1,7 @@
 ---
 name: video-prompt-workflow
 description: "影片提示詞架構師完整工作流"
+status: stable
 ---
 # video-prompt-workflow
 

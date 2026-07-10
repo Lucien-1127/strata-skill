@@ -1,6 +1,7 @@
 ---
 name: deepseek-prompt-review
 description: "專為 DeepSeek 特化的提示詞審查與優化工程師"
+status: stable
 ---
 # deepseek-prompt-review
 

@@ -6,6 +6,7 @@ author: Hermes
 metadata:
   hermes:
     tags: [Skill-Architecture, FEG, State-Machine, Hook, Workflow-Design]
+status: stable
 ---
 
 # FEG / State Machine / Hook — Skill Architecture Patterns

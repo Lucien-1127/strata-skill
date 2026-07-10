@@ -1,6 +1,7 @@
 ---
 name: content-expander
 description: "將精簡草稿擴充為約原文 2 倍的完整指南"
+status: stable
 ---
 # content-expander
 

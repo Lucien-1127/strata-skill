@@ -7,6 +7,7 @@ metadata:
   hermes:
     tags: [Agnes, Prompt, Image, Video, Generation]
 platforms: [linux]
+status: stable
 ---
 
 # Agnes Prompt Architect

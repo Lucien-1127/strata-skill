@@ -1,6 +1,7 @@
 ---
 name: macos-computer-use
 description: "Guide the agent through macOS GUI interactions — clicking, typing, scrolling, and reading screen content via accessibility APIs."
+status: stable
 ---
 # macos-computer-use
 

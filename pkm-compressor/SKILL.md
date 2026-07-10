@@ -1,6 +1,7 @@
 ---
 name: pkm-compressor
 description: "個人知識管理（PKM）知識標準化壓縮"
+status: stable
 ---
 # pkm-compressor
 

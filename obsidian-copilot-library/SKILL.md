@@ -1,6 +1,7 @@
 ---
 name: obsidian-copilot-library
 description: "Obsidian Copilot 提示詞庫索引"
+status: stable
 ---
 # obsidian-copilot-library
 

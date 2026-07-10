@@ -8,6 +8,7 @@ metadata:
   hermes:
     tags: [canva, design, automation, api, oauth]
     related_skills: [agnes-prompt-architect]
+status: stable
 ---
 
 # 🎨 Canva Connect API 自動化 (canva-automation)

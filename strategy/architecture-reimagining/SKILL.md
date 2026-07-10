@@ -1,6 +1,7 @@
 ---
 name: architecture-reimagining
 description: 架構重構分析 — 7 步驟系統性設計審查：差距分析、多維探索、替代方案生成、增強建議、模式比對、未來相容、創新審查
+status: draft
 ---
 
 # Architecture Reimagining Protocol

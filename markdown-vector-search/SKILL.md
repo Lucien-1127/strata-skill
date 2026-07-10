@@ -2,6 +2,7 @@
 name: markdown-vector-search
 description: Build ChromaDB-based semantic vector search over a directory of Markdown files. Covers recursive scanning, frontmatter parsing, smart heading-based chunking, OpenAI-compatible embedding, incremental updates, and CLI search.
 version: 1.0.0
+status: stable
 ---
 
 # Markdown Vector Search (ChromaDB + Embedding API)

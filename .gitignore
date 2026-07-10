@@ -2,6 +2,7 @@
 /.git/
 /.usage.json
 /.archive/
+/.curator_backups/
 
 # OS files
 .DS_Store
@@ -23,6 +24,9 @@ media-pipeline/scripts/output/
 
 # Hub artifacts (audit logs, index caches)
 .hub/
+
+# Curator backups
+.curator_backups/
 
 # Local config backups
 *.bak

@@ -36,13 +36,18 @@ fpdf2 直接產 PDF（管線A）有以下先天限制：
 
 ## When to Use
 
-**不使用。** 新文件一律走 Word 管線。
+### 正式文件（不使用 fpdf2）
 
-## When to Use
+知識文件、分析報告、法院書狀、超過5頁的合約 → 一律走 Word 管線（`taiwan-legal-document-formatting` + python-docx → LibreOffice → PDF）。
 
-- 用戶要求產出 PDF（知識文件、分析報告、研究報告）
-- 需要自動生成中文 PDF 文件
-- 遇到 fpdf2 CJK 文字重疊 / 溢排問題
+### 簡易合約表單 ≤5 頁（可用 fpdf2）
+
+典型場景：用戶傳一份舊 PDF 說「把虛線改成底線、排版一下，內容不動」。此時 fpdf2 直出的效率遠高於 Word 管線：
+- 不需要 .docx 中間檔
+- 只需要精準控制底線位置
+- 沒有複雜目錄/頁碼需求
+
+技術細節見 `references/inline-underline-fields.md`。
 
 ## Prerequisites
 
@@ -329,7 +334,7 @@ def gate(report):
 ## Pitfalls
 
 - ❌ **`cell()` + `multi_cell()` 同排** — CJK 字元溢排。**永遠用 multi_cell 分兩行**。
-- ❌ **`write()` 處理 CJK** — 中文 line break 以拉丁字母為準，會溢排。
+- ❌ **`write()` 處理長段落 CJK** — 中文 line break 以拉丁字母為準，長段落會溢排。但 `write()` 可用於**短內嵌文字片段**（如 inline underline 模式中夾在欄位間的標籤文字）——見 `references/inline-underline-fields.md`。
 - ❌ **Emoji 字元** — Noto Serif CJK 無 emoji，改用文字標記。
 - ❌ **行高 5.5mm 以下** — CJK 需要足夠行高，建議 5.5~6.0mm。
 - ❌ **硬編碼法條框高度** — 用 multi_cell 動態計算。
@@ -370,6 +375,7 @@ skill_view(name="fpdf2-cjk-pdf-generation", file_path="references/citation-verif
 
 - `references/citation-verification-checklist.md` — G3 引用格式驗證檢查表（模型委員會審計標準）
 - `references/v1-v6-failure-modes.md` — 六次迭代失敗模式記錄（換模型/字型前先查）
+- `references/inline-underline-fields.md` — fpdf2 內嵌底線欄位技術（簡易合約表單專用）：定位數學、glyph 問題、表格底線、何時該用替代管線
 
 ## 關聯技能
 

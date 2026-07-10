@@ -1,0 +1,105 @@
+# Nginx Admin Dashboard Configuration Template
+
+server {
+    listen 80;
+    server_name your-domain.com www.your-domain.com;  # Replace with your domain
+
+    root /var/www/your-site;  # Replace with your site root
+
+    # ── Security Headers ────────────────────────────────────
+    add_header X-Content-Type-Options nosniff;
+    add_header X-Frame-Options DENY;
+    add_header Referrer-Policy strict-when-same-origin;
+    add_header Permissions-Policy "geolocation=(), microphone=(), camera=()";
+    add_header X-XSS-Protection "1; mode=block";
+
+    # ── Admin Dashboard (FreeLLMAPI) ─────────────────
+    location /admin/ {
+        auth_basic "Admin Area";
+        auth_basic_user_file /etc/nginx/.htpasswd;
+        sub_filter_once off;
+        sub_filter_types text/html;
+        sub_filter 'href="/assets/' 'href="/admin/assets/' ;
+        sub_filter 'src="/assets/' 'src="/admin/assets/' ;
+        proxy_pass http://127.0.0.1:3001/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 120s;
+        proxy_send_timeout 30s;
+    }
+
+    location /admin/assets/ {
+        auth_basic "Admin Area";
+        auth_basic_user_file /etc/nginx/.htpasswd;
+        proxy_pass http://127.0.0.1:3001/assets/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        expires 1h;
+    }
+
+    location /admin/favicon.svg {
+        auth_basic "Admin Area";
+        auth_basic_user_file /etc/nginx/.htpasswd;
+        proxy_pass http://127.0.0.1:3001/favicon.svg;
+        proxy_http_version 1.1;
+    }
+
+    # ── AI API Proxy (FreeLLMAPI) ──────────────────
+    location /api/ai/ {
+        rewrite ^/api/ai/(.*) /v1/$1 break;
+        proxy_pass http://127.0.0.1:3001;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Original-Auth $http_authorization;
+        proxy_set_header Authorization "";
+        proxy_set_header Authorization "Bearer freellmapi-753f4ce293c4490259774f8afc7280313d1c8c4de43d06a1";
+        
+        # Rate limiting: 60 requests per minute per IP
+        limit_req zone=api burst=10 nodelay;
+    }
+
+    # ── Zhiyan Legal API Proxy ─────────────────────
+    location /api/legal/ {
+        rewrite ^/api/legal/(.*) /$1 break;
+        proxy_pass http://127.0.0.1:8000;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 120s;
+        proxy_send_timeout 30s;
+    }
+
+    # ── Root: serve home page ────────────────────────
+    location = / {
+        rewrite ^ /index.html last;
+    }
+
+    # ── Default: serve .html as is ───────────────────
+    location / {
+        try_files $uri $uri.html =404;
+    }
+
+    # ── HTML: no cache ───────────────────────────────
+    location ~* \.(html?)$ {
+        expires -1;
+        add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate";
+        try_files $uri =404;
+    }
+
+    # ── Static assets (long cache) ───────────────────
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff2?)$ {
+        expires 30d;
+        add_header Cache-Control "public, immutable";
+        try_files $uri =404;
+    }
+}

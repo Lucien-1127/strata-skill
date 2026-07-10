@@ -33,6 +33,8 @@ skill_view(name="strat-drill")
 
 **輔助參考**：`references/drill-patterns.md` — 反例產生思維模式（M1-M6）、邊界檢查表、燈號決策矩陣、遞迴擴展示例。其中 M6（結構性缺口診斷）特別適用於檢查規範/協議/狀態機的定義完備性。選用，但新手建議先讀。
 
+**架構分析參考**：`references/architecture-reimagining-framework.md` — 7 維度架構重構框架（Gap Analysis → Multi-Dimensional → Alternative Architectures → Enhancement → Pattern Matching → Future Compatibility → Innovation Review）。用於對整個系統架構執行深度審計，而非僅對單一方案進行壓力檢核。
+
 ## Quick Reference
 
 | 檢測項 | 方法 | 輸出 |

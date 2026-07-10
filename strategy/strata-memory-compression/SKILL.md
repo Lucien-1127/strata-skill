@@ -1,7 +1,7 @@
 ---
 name: strata-memory-compression
 description: claude-mem 記憶壓縮模式內化至 STRATA V13.0
-version: 0.3.0
+version: 0.3.1
 author: Hermes
 metadata:
   hermes:
@@ -147,9 +147,8 @@ trigger: true → 執行：
 1. 讀取 session：對 uncompressed_ids 中的每個 id，用 terminal 查 DB：
    terminal(command="cd ~/.hermes && sqlite3 state.db \\"SELECT * FROM messages WHERE session_id='{id}' ORDER BY id LIMIT 200;\\"")
 
-2. 寫入 MEMORY.md — terminal echo >> 直接追加：
-   terminal(command="echo '§' >> ~/.hermes/memories/MEMORY.md")
-   terminal(command="echo '摘要 {日期}: {完成事項} | {關鍵發現}' >> ~/.hermes/memories/MEMORY.md")
+2. 寫入 MEMORY.md — terminal echo >> 直接追加（**必須單行**，分兩行 echo 會造成格式漂移）：
+   terminal(command="echo '§ 摘要 {日期}: {完成事項} | {關鍵發現}' >> ~/.hermes/memories/MEMORY.md")
 
 3. Mem0 同步 — 將新摘要寫入向量庫供語意檢索：
    terminal(command="cd /home/ysga1/zhiyan-search && python3 save_summary_to_mem0.py")
@@ -325,6 +324,8 @@ result = session_search(query="當前議題關鍵詞", limit=3, sort="newest")
   INSERT OR REPLACE INTO compression_locks VALUES('{session_id}', 'auto-compress', {now_epoch}, {now_epoch + 7200})
   ```
   實戰陷阱：只傳 2 個值（session_id + expire）會 failed，因為第 2、3 欄不可為 null。
+
+- **MEMORY.md 格式漂移（2026-07-09 發現）**：舊版 cron prompt 用 `echo '§'` + `echo '摘要'` 分兩行寫入，產生 `§\ncontent\n` 多行格式，`memory()` 工具無法解析此格式（期望 `§ content\n` 單行格式），導致後續 `memory(action='add')` 報「won't round-trip」。**解法**：(a) cron prompt 已修正為單行 `echo '§ 摘要...'`；(b) 若 MEMORY.md 已漂移，用 `write_file` 重寫為乾淨單行格式——STRATA 條目在系統 prompt MEMORY 段中仍有注入，不會遺失。
 
 ## 驗證
 

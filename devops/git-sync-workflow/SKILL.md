@@ -148,6 +148,10 @@ Expected output:
 - Empty log line (no commits ahead)
 - Empty status line (clean working tree)
 
+## Related Skills
+
+- `github-repo-spring-cleaning` — 大規模 GitHub repo 整理（LICENSE/README/.gitignore/topics/history cleanup/QC）
+
 ## Linked References
 
 - `references/monorepo-add-external-project.md` — Full worked example of adding external projects (brand-site, Vite React Mini App) into a monorepo, including the embedded-.git submodule trap fix and non-interactive push credential diagnostics.

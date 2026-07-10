@@ -169,9 +169,22 @@ After the architecture audit, if the project uses billable cloud services (VMs, 
 
 This is covered by the `gcp-cost-optimization` skill (devops category).
 
-## Cross-references
+## 擴展：多倉庫批次清理（GitHub Repo Spring-Cleaning）
+
+當用戶要求「整理 GitHub 儲存庫」「優化所有 repo」「批次補 LICENSE/README」時，本技能涵蓋的第一階段是 **掃描與評估**。實際執行清理則交給 `devops/github-repo-spring-cleaning` 技能。
+
+兩者的分工邊界：
+- **project-architecture-audit**：掃描發現問題 → 產出 QC 報告
+- **github-repo-spring-cleaning**：接收 QC 報告 → 執行 8 階段清理（git email、LICENSE、README、.gitignore、topics、archive、history purge）
+
+協作流程：
+1. audit 掃描所有 repo 的六軸表面（README/.gitignore/敏感資料/違規檢查/build artifacts/submodule）
+2. audit 產出 `QC_Phase1_Report.md`，按嚴重等級排序
+3. subagent 平行處理高優先修復（每個子代理負責 2-3 個問題）
+4. audit 做二次 QC 驗證（L1 tracking + L2 history + L3 API）
 
 - `references/fastapi-routing-diagnosis.md` — FastAPI 路由診斷協議：假設驅動、強度路由、最小 diff 修復。用於 API 服務 404/5xx 路由故障場景。
+- `references/multi-repo-qc-scan.md` — 多倉庫跨 repo QC 掃描協議：六軸表面審計（README/.gitignore/敏感資料/違規檢查/build artifacts/submodule）。用於批次 repo 健康檢查任務。
 - `gcp-cost-optimization` skill — Full cost reduction playbook after audit.
 - `vertex-ai-web-integration` skill — Refactoring Vertex AI Studio exports to clean SDK-on-backend.
 - `google-cloud-ai` skill — Broader GCP AI service integration (note: overlaps with `vertex-ai-web-integration`; consider consolidation).

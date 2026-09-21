@@ -1,6 +1,6 @@
 # Strata Skill — Hermes Agent 技能庫
 
-Strata Skill 是為 **Hermes Agent** 量身打造的技能庫，收錄 139 項技能、涵蓋 16 大分類，涵蓋提示詞工程、開發維運、法律應用、策略分析等領域。讓你的 Hermes Agent 一鍵獲得專業能力。
+Strata Skill 是為 **Hermes Agent** 量身打造的技能庫，收錄多類型技能，涵蓋提示詞工程、開發維運、法律應用、策略分析等領域。讓你的 Hermes Agent 一鍵獲得專業能力。
 
 ---
 
@@ -23,7 +23,7 @@ Strata Skill 是為 **Hermes Agent** 量身打造的技能庫，收錄 139 項�
 | **system** | 系統層約束與規則 | 1 |
 | **system-admin** | 系統管理與基礎設施 | 2 |
 | **video** | 影片流水線與提示詞工作流 | 1 |
-| **writing** | 寫作指令編譯與內容生成 | 1 |
+| **writing** | 寫作指令編譯與內容生成 | 2 |
 
 ### 各分類詳細技能
 
@@ -109,7 +109,8 @@ Strata Skill 是為 **Hermes Agent** 量身打造的技能庫，收錄 139 項�
 - `idol-video-pipeline` — 角色參考圖→影片流水線（四階段審核）
 
 #### writing
-- `writer-compiler` — 動態多領域寫手指令編譯器
+- `writer-compiler` — 自用 v3.7 寫手指令編譯器：多領域、系列大綱優先、版本化交接
+- `creative-production` — 自用正文／改稿／劇本分鏡流程，含本機契約檢查器、範例與測試
 
 ---
 

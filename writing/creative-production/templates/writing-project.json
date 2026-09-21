@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "project_id": "example-writing",
+  "mode": "writing",
+  "domain": "nonfiction",
+  "versions": {
+    "outline": "v1"
+  },
+  "consumed_versions": {
+    "outline": "v1"
+  },
+  "units": [
+    {
+      "id": "ARTICLE01",
+      "file": "draft.md",
+      "status": "draft",
+      "length": {
+        "min": 1,
+        "max": 1000
+      }
+    }
+  ]
+}

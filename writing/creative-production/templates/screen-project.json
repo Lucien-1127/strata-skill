@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "project_id": "example-screen",
+  "mode": "screen",
+  "domain": "nonfiction",
+  "versions": {
+    "outline": "v1",
+    "script": "v1"
+  },
+  "consumed_versions": {
+    "outline": "v1",
+    "script": "v1"
+  },
+  "units": [
+    {
+      "id": "ARTICLE01",
+      "file": "draft.md",
+      "status": "approved",
+      "length": {
+        "min": 1,
+        "max": 1000
+      }
+    }
+  ],
+  "continuity_level": "A0",
+  "generation": {
+    "requested": false
+  },
+  "assets": [],
+  "scenes": [
+    {
+      "id": "SC01"
+    }
+  ],
+  "shots": [
+    {
+      "id": "SH01",
+      "scene_id": "SC01",
+      "asset_refs": [],
+      "duration": {
+        "seconds": 4,
+        "source": "authored"
+      }
+    }
+  ]
+}

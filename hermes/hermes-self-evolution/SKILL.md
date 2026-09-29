@@ -3,7 +3,7 @@ name: hermes-self-evolution
 description: Improve Hermes Agent skills with evidence-driven, bounded evolution; preserve intent, compare against baseline, use holdout/customer-style acceptance, reject regressions, and propose reviewed changes rather than silently self-modifying production.
 version: 0.2.0
 author: Hermes
-platforms: [linux, macos, windows]
+platforms: [linux]
 metadata:
   hermes:
     tags: [Self-Evolution, Optimization, DSPy, GEPA, Evaluation, Regression]
@@ -199,7 +199,7 @@ Candidate 只有在以下同時成立時才可保留：
 
 ## Pitfalls
 
-- **Self-review bias（自我審查偏誤）**：同一模型容易漏掉自己的錯；重要 gate 要外部證據、獨立上下文或確定性驗證器。
+- **Self-review bias（自我審查偏誤）**：研究顯示部分模型對自己產生的錯誤可能較難啟動修正；因此重要 gate 以外部證據、獨立上下文或確定性驗證器補強，不把單一研究泛化成所有模型的定律。
 - **Over-refinement（過度修正）**：不是每個輸出都值得再改；先驗證有失敗再修。
 - **Evaluator overfitting（評測過擬合）**：反覆針對同一公開案例修改會把答案寫進 prompt；保留 holdout。
 - **Score gaming（刷分）**：不得刪案例、降低門檻、變更 judge 讓 candidate 過關。

@@ -188,8 +188,14 @@ def validate(report, evidence_root: Path):
         )
         if not observed_failure:
             findings.append("regressed requires an observed, executed failed check")
-    if status == "no_progress" and type(attempts) is int and attempts < 2:
-        findings.append("no_progress requires at least two recorded attempts")
+    if status == "no_progress":
+        if type(attempts) is int and attempts < 2:
+            findings.append("no_progress requires at least two recorded attempts")
+        if not any(
+            isinstance(c, dict) and c.get("result") == "fail"
+            and c.get("executed") is True for c in checks
+        ):
+            findings.append("no_progress requires an observed failed check")
 
     verdict = "invalid" if findings else ("evidence_consistent" if status == "completed" else "unresolved")
     return {"verdict": verdict, "exit_code": 1 if findings else (0 if status == "completed" else 2),

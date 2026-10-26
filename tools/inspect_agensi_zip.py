@@ -71,7 +71,7 @@ def inspect(path: Path) -> dict:
                 mode = item.external_attr >> 16
                 if stat.S_ISLNK(mode):
                     blockers.append(f"Symlink entry is prohibited: {item_name}")
-                if Path(item_name).suffix.lower() not in TEXT_EXTENSIONS and Path(item_name).name != ".env.example":
+                if Path(item_name).suffix.lower() not in TEXT_EXTENSIONS and Path(item_name).name not in {".env.example", "LICENSE"}:
                     blockers.append(f"Unsupported file type: {item_name}")
                     continue
                 if item_name.endswith("/SKILL.md") or item_name == "SKILL.md":

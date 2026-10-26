@@ -89,6 +89,29 @@ def scan(root: Path) -> dict:
                 add("WARNING", "broken_local_link", f, dest)
         skills.append({"path": rel, "name": name, "description": description, "version": fields.get("version", "")})
 
+    # Resource sweep: SKILL.md alone is insufficient. Scan all committed text
+    # resources for credentials, including scripts, configuration and templates.
+    resource_suffixes = {".md", ".txt", ".py", ".sh", ".json", ".yaml", ".yml",
+                         ".toml", ".csv", ".js", ".ts", ".xml", ".ini", ".cfg", ".html"}
+    for resource in sorted(root.rglob("*")):
+        if not resource.is_file() or resource.name == "SKILL.md":
+            continue
+        if any(part in EXCLUDED for part in resource.relative_to(root).parts):
+            continue
+        if resource.suffix.lower() not in resource_suffixes and resource.name != ".env.example":
+            continue
+        if resource.stat().st_size > 1024 * 1024:
+            add("WARNING", "oversized_text_resource", resource, "Manual audit required for resource larger than 1MB")
+            continue
+        body = resource.read_text(encoding="utf-8", errors="replace")
+        for code, pattern in CREDENTIALS:
+            if pattern.search(body):
+                add("BLOCKER", code, resource, "Potential credential in bundled resource; inspect securely")
+        if resource.suffix.lower() in {".py", ".sh"}:
+            for code, pattern in RISK_PATTERNS:
+                if pattern.search(body):
+                    add("WARNING", code, resource, "Review executable code context")
+
     for f in sorted(root.iterdir()):
         if f.is_file() and (f.name in PRIVATE_ROOT_NAMES or f.suffix.lower() in PRIVATE_SUFFIXES):
             add("WARNING", "non_catalog_root_file", f, "Review before publishing; never include in a skill ZIP")

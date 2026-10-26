@@ -8,13 +8,17 @@
 
 **Summary (under 300 characters):** Stop AI agents from claiming success without recorded checks. Run a four-gate closeout review covering functionality, safety, regressions and customer acceptance, plus a local SHA-256 evidence validator that explicitly separates completed, blocked, regressed and unverified work.
 
-**Category:** Trust & Audit / Developer Productivity
+**Categories (actual Agensi taxonomy):** Agents & Orchestration (primary), Testing & Debugging, Code Quality & Review
 
 **Tags:** agent-reliability, audit, automation, quality
 
 **Keywords:** agent-verification, evidence, regression, closeout, workflow, safety
 
 **Version:** 0.1.0 beta
+
+**Price:** Free introductory listing; no payout setup required.
+
+**Compatibility note:** The written workflow works with agents capable of reading SKILL.md. Optional digest validation needs Python 3.11+ and read-only local file access; Hermes end-to-end compatibility is not yet independently certified.
 
 **Use cases:** Agent handoff quality control; pre-release checklist; multi-step task verification; regression and exception tracking; client-delivery review.
 
@@ -76,11 +80,13 @@ There is already a separate Agensi product named `Agent Reliability Audit` by an
 
 ## Pricing experiment — proposal, not a claim of market prices
 
-Start with a **free introductory listing** to measure real skill loads and feedback, subject to Agensi creator review. Consider a paid extended version only when there is materially differentiated functionality, verified customer demand and a clear maintenance commitment. Do not sell a cosmetically repackaged copy of freely available material as though it were exclusive.
+Submit this initial pilot as **Free**, with no Stripe or Zoneless onboarding required. Measure usage and buyer feedback before deciding on paid extensions. Consider a paid extended version only when there is materially differentiated functionality, verified customer demand and a clear maintenance commitment. Do not sell a cosmetically repackaged copy of freely available material as though it were exclusive.
 
-## Joeri / onboarding discussion
+## Submission path agreed with Agensi
 
-Ask for review of this specific one-skill pilot, not a generic promotion promise. Useful questions: whether this scope addresses the platform's current Trust/Audit demand, whether text-only Python verification is appropriate for their agents, and what disclosure/quality additions would improve approval likelihood.
+Joeri clarified by email that pre-submission individual feedback is not available. Submit directly through https://www.agensi.io/dashboard/submit after logging in and enabling Creator Mode; security and human review follow submission. If rejected, fix the reported reason and resubmit a revised ZIP. This pilot does **not** require Zoneless because it is Free. A future paid listing requires separate Zoneless eligibility approval and USDC wallet onboarding for Taiwan.
+
+**Creator actions:** create/sign in, enable Creator Mode, complete storefront profile, upload the single-skill ZIP from GitHub Actions, choose Free, review preview and permission flags, submit. No Agensi submission has been made by the automation.
 
 Official marketplace packaging and review guidance:
 - https://www.agensi.io/docs/packaging

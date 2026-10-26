@@ -25,6 +25,8 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Regression tests
         run: python -m unittest discover -s tests -p 'test_marketplace_*.py' -v
+      - name: Verify published skill catalog is synchronized
+        run: python tools/generate_catalog.py --root . --check
       - name: Full skill library audit
         run: |
           python tools/audit_skills.py --root . --json skill-audit.json --markdown skill-audit.md --fail-on-blockers

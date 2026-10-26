@@ -48,7 +48,7 @@ class MarketplaceReadinessTests(unittest.TestCase):
 
     def test_private_key_blocks(self):
         file = self.root / "first-skill" / "SKILL.md"
-        file.write_text(file.read_text() + "\n-----BEGIN OPENSSH PRIVATE KEY-----\n", encoding="utf-8")
+        file.write_text(file.read_text() + "\n-----BEGIN OPENSSH PRIVATE KEY-----\n" + "A" * 80 + "\n-----END OPENSSH PRIVATE KEY-----\n", encoding="utf-8")
         self.assertIn("private_key", [x["code"] for x in scan(self.root)["findings"]])
 
     def test_root_pdf_not_in_package(self):

@@ -14,7 +14,7 @@ PRIVATE_ROOT_NAMES = {".curator_state", ".usage.json.lock"}
 PRIVATE_SUFFIXES = {".pdf", ".p12", ".pfx", ".pem", ".key", ".db", ".sqlite", ".sqlite3"}
 NAME = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 CREDENTIALS = (
-    ("private_key", re.compile(r"-----BEGIN (?:OPENSSH |RSA |EC )?PRIVATE KEY-----")),
+    ("private_key", re.compile(r"-----BEGIN (?:OPENSSH |RSA |EC )?PRIVATE KEY-----[\\s\\S]{64,12000}?-----END (?:OPENSSH |RSA |EC )?PRIVATE KEY-----")),
     ("openrouter_key", re.compile(r"\bsk-or-v1-[a-fA-F0-9]{32,}\b")),
     ("anthropic_key", re.compile(r"\bsk-ant-[A-Za-z0-9_-]{30,}\b")),
     ("aws_access_key", re.compile(r"\b(?:AKIA|ASIA)[A-Z0-9]{16}\b")),

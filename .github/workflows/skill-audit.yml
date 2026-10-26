@@ -1,0 +1,43 @@
+name: Skill catalog audit and marketplace regression tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+      - 'audit/agensi-readiness-*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Regression tests
+        run: python -m unittest discover -s tests -p 'test_marketplace_*.py' -v
+      - name: Full skill library audit
+        run: |
+          python tools/audit_skills.py --root . --json skill-audit.json --markdown skill-audit.md --fail-on-blockers
+      - name: Smoke-test allowlist packaging
+        run: |
+          python tools/build_agensi_pack.py --root . --out /tmp/agensi-prompt-factory.zip prompt-factory
+          python -m zipfile -l /tmp/agensi-prompt-factory.zip
+      - name: Upload audit evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: skill-audit-python-${{ matrix.python-version }}
+          path: |
+            skill-audit.json
+            skill-audit.md
+          if-no-files-found: ignore

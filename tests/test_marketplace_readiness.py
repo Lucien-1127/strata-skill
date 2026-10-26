@@ -51,6 +51,17 @@ class MarketplaceReadinessTests(unittest.TestCase):
         file.write_text(file.read_text() + "\n-----BEGIN OPENSSH PRIVATE KEY-----\n" + "A" * 80 + "\n-----END OPENSSH PRIVATE KEY-----\n", encoding="utf-8")
         self.assertIn("private_key", [x["code"] for x in scan(self.root)["findings"]])
 
+    def test_resource_secret_blocks_packaging(self):
+        scripts = self.root / "first-skill" / "scripts"
+        scripts.mkdir()
+        (scripts / "helper.py").write_text(
+            'TOKEN = "sk-or-v1-' + "a" * 48 + '"\n', encoding="utf-8")
+        findings = scan(self.root)["findings"]
+        self.assertTrue(any(x["code"] == "openrouter_key" and
+                            x["path"] == "first-skill/scripts/helper.py" for x in findings))
+        with self.assertRaisesRegex(ValueError, "Potential openrouter_key"):
+            create_pack(self.root, Path(self.temp.name) / "package.zip", ["first-skill"])
+
     def test_root_pdf_not_in_package(self):
         (self.root / "borrower.pdf").write_bytes(b"private sample")
         self.assertIn("non_catalog_root_file", [x["code"] for x in scan(self.root)["findings"]])

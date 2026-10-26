@@ -122,6 +122,36 @@ class ReliabilityAuditTests(unittest.TestCase):
         self.report["checks"][0]["dimension"] = ["functional"]
         self.assertEqual(self.verdict(), "invalid")
 
+    def _run_cli(self):
+        import subprocess
+        report_path = self.root / "report.json"
+        report_path.write_text(json.dumps(self.report), encoding="utf-8")
+        script = ROOT / "agent-reliability-audit" / "scripts" / "verify_closeout.py"
+        result = subprocess.run(
+            [sys.executable, str(script), "--report", str(report_path),
+             "--evidence-root", str(self.root)],
+            text=True, capture_output=True, check=False, timeout=10
+        )
+        return result.returncode, json.loads(result.stdout)
+
+    def test_cli_completed_returns_zero(self):
+        code, output = self._run_cli()
+        self.assertEqual(code, 0)
+        self.assertEqual(output["verdict"], "verified_completed")
+
+    def test_cli_blocked_returns_two(self):
+        self.report.update(status="blocked", attempts=0, checks=[],
+                           blockers=["Approval for deployment missing"])
+        code, output = self._run_cli()
+        self.assertEqual(code, 2)
+        self.assertEqual(output["verdict"], "unresolved")
+
+    def test_cli_tampered_evidence_returns_one(self):
+        (self.root / "safety.txt").write_text("Tampered evidence")
+        code, output = self._run_cli()
+        self.assertEqual(code, 1)
+        self.assertEqual(output["verdict"], "invalid")
+
     def test_duplicate_json_keys_rejected(self):
         path = self.root / "duplicate.json"
         path.write_text('{"schema_version":"1.0","schema_version":"1.0"}')

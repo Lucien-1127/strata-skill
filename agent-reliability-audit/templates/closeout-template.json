@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "task_id": "replace-with-actual-task-id",
+  "objective": "Describe the actual customer goal and acceptance criteria.",
+  "status": "unverified",
+  "attempts": 0,
+  "max_attempts": 3,
+  "blockers": [],
+  "checks": [
+    {
+      "id": "functional-01",
+      "dimension": "functional",
+      "result": "skipped",
+      "executed": false,
+      "exit_code": null,
+      "evidence_path": null,
+      "evidence_sha256": null
+    },
+    {
+      "id": "safety-01",
+      "dimension": "safety",
+      "result": "skipped",
+      "executed": false,
+      "exit_code": null,
+      "evidence_path": null,
+      "evidence_sha256": null
+    },
+    {
+      "id": "regression-01",
+      "dimension": "regression",
+      "result": "skipped",
+      "executed": false,
+      "exit_code": null,
+      "evidence_path": null,
+      "evidence_sha256": null
+    },
+    {
+      "id": "customer-01",
+      "dimension": "customer",
+      "result": "skipped",
+      "executed": false,
+      "exit_code": null,
+      "evidence_path": null,
+      "evidence_sha256": null
+    }
+  ]
+}

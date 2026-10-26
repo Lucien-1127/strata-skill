@@ -50,7 +50,7 @@ class ReliabilityAuditTests(unittest.TestCase):
 
     def test_four_evidence_gates_pass(self):
         outcome = validate(self.report, self.root)
-        self.assertEqual(outcome["verdict"], "verified_completed")
+        self.assertEqual(outcome["verdict"], "evidence_consistent")
         self.assertEqual(outcome["exit_code"], 0)
         self.assertEqual(set(outcome["checked_gates"]), set(DIMS))
 
@@ -137,7 +137,7 @@ class ReliabilityAuditTests(unittest.TestCase):
     def test_cli_completed_returns_zero(self):
         code, output = self._run_cli()
         self.assertEqual(code, 0)
-        self.assertEqual(output["verdict"], "verified_completed")
+        self.assertEqual(output["verdict"], "evidence_consistent")
 
     def test_cli_blocked_returns_two(self):
         self.report.update(status="blocked", attempts=0, checks=[],
@@ -151,6 +151,27 @@ class ReliabilityAuditTests(unittest.TestCase):
         code, output = self._run_cli()
         self.assertEqual(code, 1)
         self.assertEqual(output["verdict"], "invalid")
+
+    def test_regressed_without_failed_executed_check_is_invalid(self):
+        self.report["status"] = "regressed"
+        self.assertEqual(self.verdict(), "invalid")
+
+    def test_regressed_without_actual_execution_is_invalid(self):
+        self.report["status"] = "regressed"
+        self.report["checks"][2]["result"] = "fail"
+        self.report["checks"][2]["executed"] = False
+        self.report["checks"][2]["exit_code"] = None
+        self.assertEqual(self.verdict(), "invalid")
+
+    def test_no_progress_without_retry_is_invalid(self):
+        self.report["status"] = "no_progress"
+        self.report["attempts"] = 1
+        self.assertEqual(self.verdict(), "invalid")
+
+    def test_no_progress_after_two_attempts_is_unresolved(self):
+        self.report["status"] = "no_progress"
+        self.report["attempts"] = 2
+        self.assertEqual(self.verdict(), "unresolved")
 
     def test_duplicate_json_keys_rejected(self):
         path = self.root / "duplicate.json"

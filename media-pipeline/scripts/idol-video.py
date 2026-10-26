@@ -102,30 +102,34 @@ def concat_videos(video_files, output_path, crossfade=False, duration=5):
     n = len(video_files)
     print(f"\n🔗 串接 {n} 個場景...")
     if crossfade and n >= 2:
-        offset = duration - 1  # crossfade starts 1s before scene end
-        filter_parts = [f"[0:v]format=yuv420p[v0]"]
+        filter_parts = ["[0:v]format=yuv420p[v0]"]
         for i in range(1, n):
             actual_offset = i * (duration - 1)
             filter_parts.append(
                 f"[v{i-1}][{i}:v]xfade=transition=fade:duration=1:offset={actual_offset}[v{i}]"
             )
         filter_chain = "; ".join(filter_parts)
-        cmd = (
-            f"ffmpeg -y {' '.join(f'-i \"{f}\"' for f in video_files)} "
-            f"-filter_complex \"{filter_chain}\" "
-            f"-map \"[v{n-1}]\" -c:v libx264 -preset medium -crf 18 "
-            f"-pix_fmt yuv420p \"{output_path}\""
-        )
+        cmd = ["ffmpeg", "-y"]
+        for video_file in video_files:
+            cmd.extend(["-i", str(video_file)])
+        cmd.extend([
+            "-filter_complex", filter_chain, "-map", f"[v{n-1}]",
+            "-c:v", "libx264", "-preset", "medium", "-crf", "18",
+            "-pix_fmt", "yuv420p", str(output_path),
+        ])
     else:
         filelist = OUTPUT_DIR / "concat_list.txt"
-        filelist.write_text("\n".join(f"file '{f.name}'" for f in video_files))
-        cmd = (
-            f"ffmpeg -y -f concat -safe 0 "
-            f"-i \"{filelist}\" "
-            f"-c:v libx264 -preset medium -crf 18 "
-            f"-pix_fmt yuv420p \"{output_path}\""
-        )
-    result = subprocess.run(cmd, capture_output=True, text=True, timeout=600, shell=True)
+        # Escape quotes/backslashes for ffmpeg concat demuxer's file syntax.
+        entries = ["file '" + f.name.replace("'", "'\\''") + "'" for f in video_files]
+        filelist.write_text("\n".join(entries), encoding="utf-8")
+        cmd = [
+            "ffmpeg", "-y", "-f", "concat", "-safe", "0",
+            "-i", str(filelist), "-c:v", "libx264",
+            "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p",
+            str(output_path),
+        ]
+    # Always supply an argv list. Never interpolate filenames into a shell command.
+    result = subprocess.run(cmd, capture_output=True, text=True, timeout=600)
     if result.returncode != 0:
         print(f"❌ ffmpeg: {result.stderr[-300:]}")
         return False

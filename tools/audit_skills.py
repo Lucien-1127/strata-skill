@@ -130,6 +130,9 @@ def main(argv=None) -> int:
     for issue in result["findings"]:
         if issue["level"] == "BLOCKER":
             print(f"BLOCKER {issue['code']} {issue['path']}")
+    for issue in result["findings"]:
+        if issue["code"] in {"broken_local_link", "download_pipe_shell"}:
+            print(f"REVIEW {issue['code']} {issue['path']}")
     print(f"SKILLS={result['skill_count']} BLOCKERS={result['summary']['blockers']} WARNINGS={result['summary']['warnings']}")
     print(json.dumps(result["summary"]["by_code"], ensure_ascii=False, sort_keys=True))
     return int(args.fail_on_blockers and result["summary"]["blockers"] > 0)

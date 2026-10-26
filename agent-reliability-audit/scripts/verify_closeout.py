@@ -96,7 +96,7 @@ def validate(report, evidence_root: Path):
     if not isinstance(goal, str) or not (1 <= len(goal.strip()) <= 2000):
         findings.append("objective must be a nonempty text under 2001 characters")
     status = report.get("status")
-    if status not in STATUSES:
+    if not isinstance(status, str) or status not in STATUSES:
         findings.append("Unknown status")
     attempts = report.get("attempts")
     max_attempts = report.get("max_attempts")
@@ -134,10 +134,10 @@ def validate(report, evidence_root: Path):
         else:
             identifiers.add(item_id)
         dimension = item.get("dimension")
-        if dimension not in DIMENSIONS:
+        if not isinstance(dimension, str) or dimension not in DIMENSIONS:
             findings.append(f"{label}: invalid dimension")
         result = item.get("result")
-        if result not in RESULTS:
+        if not isinstance(result, str) or result not in RESULTS:
             findings.append(f"{label}: invalid result")
         executed = item.get("executed")
         if type(executed) is not bool:
@@ -165,10 +165,11 @@ def validate(report, evidence_root: Path):
                 findings.append(f"{label}: {exc}")
             else:
                 if isinstance(digest, str) and SHA.fullmatch(digest):
-                    actual = hashlib.file_digest(file.open("rb"), "sha256").hexdigest()
+                    with file.open("rb") as stream:
+                        actual = hashlib.file_digest(stream, "sha256").hexdigest()
                     if actual.lower() != digest.lower():
                         findings.append(f"{label}: evidence checksum mismatch")
-        if dimension in DIMENSIONS and result == "pass" and executed is True and exit_code == 0:
+        if isinstance(dimension, str) and dimension in DIMENSIONS and result == "pass" and executed is True and exit_code == 0:
             passes.add(dimension)
 
     if status == "completed":

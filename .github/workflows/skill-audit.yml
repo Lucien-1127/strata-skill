@@ -1,0 +1,52 @@
+name: Skill catalog audit and marketplace regression tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+      - 'audit/agensi-readiness-*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.13']
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Regression tests
+        run: python -m unittest discover -s tests -p 'test_marketplace_*.py' -v
+      - name: Verify published skill catalog is synchronized
+        run: python tools/generate_catalog.py --root . --check
+      - name: Full skill library audit
+        run: |
+          python tools/audit_skills.py --root . --json skill-audit.json --markdown skill-audit.md --fail-on-blockers
+      - name: Smoke-test allowlist packaging
+        run: |
+          python tools/build_agensi_pack.py --root . --out /tmp/agensi-prompt-factory.zip prompt-factory
+          python -m zipfile -l /tmp/agensi-prompt-factory.zip
+      - name: Upload vetted pilot ZIP
+        if: success()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: agensi-prompt-factory-python-${{ matrix.python-version }}
+          path: /tmp/agensi-prompt-factory.zip
+          if-no-files-found: error
+      - name: Upload audit evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: skill-audit-python-${{ matrix.python-version }}
+          path: |
+            skill-audit.json
+            skill-audit.md
+          if-no-files-found: ignore

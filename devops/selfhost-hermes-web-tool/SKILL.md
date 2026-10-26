@@ -33,7 +33,7 @@ Does NOT cover: Docker-based deployments, Kubernetes, or non-Hermes tools.
 
 ## Prerequisites
 
-- nvm installed (`curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash`)
+- nvm installed (use its official instructions; download and inspect the installer before executing it; do not pipe a remote download directly into a shell)
 - Node.js 20+ (installed via nvm if not available)
 - nginx with sudo access
 - cloudflared installed (for temporary tunnel)

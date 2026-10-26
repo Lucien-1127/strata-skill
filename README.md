@@ -1,169 +1,85 @@
-# Strata Skill — Hermes Agent 技能庫
+# Strata Skill — AI Agent Skills Library
 
-Strata Skill 是為 **Hermes Agent** 量身打造的技能庫，收錄 139 項技能、涵蓋 16 大分類，涵蓋提示詞工程、開發維運、法律應用、策略分析等領域。讓你的 Hermes Agent 一鍵獲得專業能力。
+**142 active skill specifications** for planning, prompt engineering, developer workflows, research, legal-document workflows, and quality control. The repository is primarily developed for **Hermes Agent**. A skill's presence in this library **does not** mean it has been independently tested on every agent platform.
 
----
+[Complete, generated skill catalog](docs/SKILL_CATALOG.md) · [Quality and marketplace readiness](docs/MARKETPLACE_READINESS.md) · [Agensi pilot proposal](docs/AGENSI_CREATOR_PILOT.md) · [MIT license](LICENSE)
 
-## 技能分類一覽
+## What you can do
 
-| 分類 | 說明 | 技能數量 |
-|------|------|----------|
-| **automation** | 自動化作業（Canva、排程等） | 1 |
-| **communication** | 溝通風格與回應慣例 | 1 |
-| **devops** | 開發維運、診斷、部署、監控 | 16 |
-| **hermes** | Hermes 自我進化與技能管理 | 3 |
-| **legal** | 台灣法律文件與合約範本 | 2 |
-| **maintenance** | 系統維護與更新程序 | 1 |
-| **pdf** | PDF 文件生成（含 CJK 支援） | 1 |
-| **prompt-engineering** | 提示詞工程（圖像/影片） | 2 |
-| **quality** | 程式品質與 API 驗證 | 2 |
-| **research** | API 研究、法律研究、GitHub 深度分析 | 4 |
-| **security** | 提示詞注入防禦框架 | 1 |
-| **strategy** | 策略分析、任務規劃、FEG 架構 | 13 |
-| **system** | 系統層約束與規則 | 1 |
-| **system-admin** | 系統管理與基礎設施 | 2 |
-| **video** | 影片流水線與提示詞工作流 | 1 |
-| **writing** | 寫作指令編譯與內容生成 | 1 |
+- **Design reusable workflows:** turn ambiguous requirements into concrete agent instructions, review checkpoints, and stopping conditions.
+- **Build and review prompts:** structured creation, iteration, and assessment with explicit assumptions.
+- **Improve developer operations:** documented diagnostics, deployment procedures, and quality gates.
+- **Work on domain-specific tasks:** legal and research skills with a requirement for verification and human oversight.
 
-### 各分類詳細技能
+**Featured pilot:** [Prompt Factory](prompt-factory/SKILL.md) — a beta skill for generating and reviewing prompts and agent-skill specifications. It uses bundled templates; its evaluation scores are self-assessments, **not independent benchmark results**.
 
-#### automation
-- `canva-automation` — Canva Connect API 自動化（設計/資產/匯出/自動填充）
+## Quick start
 
-#### communication
-- `user-communication-style` — 老闆偏好的回應格式、語言風格與溝通慣例
-
-#### devops
-- `api-route-diagnostics` — FastAPI 路由層智慧診斷與修復
-- `backend-api-diagnostics` — 後端 API 服務路由層診斷與修復
-- `canva-connect` — Canva Connect API 整合（OAuth、設計操作）
-- `fastapi-diagnosis` — 系統化 FastAPI 路由診斷
-- `fastapi-routing-diagnosis` — FastAPI 路由診斷、最小修改、迴歸驗證
-- `fastapi-routing-diagnostics` — FastAPI 路由診斷與修復 SOP
-- `gcp-vm-administration` — GCP VM 狀態管理與驗證
-- `git-sync-workflow` — 本地 Git repo 與遠端同步
-- `hermes-proxy-console` — Hermes Proxy 監控 Mini App
-- `managing-hermes-legal-system` — 智研法律系統管理程序
-- `mini-app-deployment` — Mini App 完整部署工作流
-- `segmentio-stack-ecs` — AWS ECS 基礎設施佈建（Terraform）
-- `selfhost-hermes-web-tool` — Hermes Web Dashboard 自架
-- `server-watchdog` — 伺服器程序 Watchdog（cronjob）
-- `web-service-deploy` — 網頁服務完整生命週期部署
-- `zhiyan-system-health-audit` — 智研記憶與儲存健康審計
-
-#### hermes
-- `hermes-self-evolution` — 自動進化 Hermes 技能與提示詞
-- `hermes-skill-author` — SKILL.md 品質評分撰寫
-- `hermes-skill-forge` — 將重複任務自動轉為可重用技能
-
-#### legal
-- `contract-templates` — 台灣實務合約範本庫
-- `taiwan-legal-document-formatting` — 法院/政府文件格式規則
-
-#### maintenance
-- `zhiyan-system-update` — 智研法律系統更新程序
-
-#### pdf
-- `fpdf2-cjk-pdf-generation` — 使用 fpdf2 產生 CJK PDF（無重疊）
-
-#### prompt-engineering
-- `agnes-prompt-architect` — Agnes 圖像+影片統一提示詞架構
-- `img2vid-character` — 圖生影角色一致性提示詞架構
-
-#### quality
-- `fastapi-route-diagnosis` — 假設驅動 FastAPI 路由診斷
-- `runtime-api-verification` — API 變更後自動端點驗證
-
-#### research
-- `api-integration-research` — 第三方 API 系統性研究方法
-- `deep-research-github-repo` — GitHub 儲存庫架構深度分析
-- `taiwan-legal-research` — 台灣法律主題系統性研究
-- `verification-before-completion` — 完成前驗證流程
-
-#### security
-- `keter-prompt-defense` — 多層次提示詞注入防禦框架
-
-#### strategy
-- `architecture-reimagining` — 架構重構分析（7 步驟）
-- `decision-graph-router` — FEG 風格決策路由
-- `dispatching-parallel-agents` — 並行代理任務分派
-- `executing-plans` — 書面實作計劃執行
-- `feg-state-hook-architecture` — FEG/State Machine/Hook 模式嵌入
-- `strat-anchor-5d` — 脈絡錨定 + 5 維分析
-- `strat-drill` — 邏輯壓力測試與邊界案例
-- `strat-forge-output` — 最終輸出鍛造與格式規範
-- `strat-memory-policy` — 跨對話記憶壓縮規則
-- `strat-orchestrator` — 策略模組協調分派
-- `strata-memory-compression` — STRATA 記憶壓縮模式
-- `subagent-driven-development` — 子代理驅動開發
-- `writing-plans` — 規格說明轉多步驟實作計劃
-
-#### system
-- `iron-laws` — 三條鐵律（所有 Agent 行為最高約束）
-
-#### system-admin
-- `zhiyan-rag-infra` — 法律文件語意向量搜尋基礎設施
-- `zhiyan-vm-setup` — 智研法律系統 VM 設定
-
-#### video
-- `idol-video-pipeline` — 角色參考圖→影片流水線（四階段審核）
-
-#### writing
-- `writer-compiler` — 動態多領域寫手指令編譯器
-
----
-
-## 安裝方式
-
-### 前置需求
-
-- [Hermes Agent](https://hermes-agent.nousresearch.com) 已安裝並可正常執行
-- Git
-
-### 1. Clone 儲存庫
+Requirements: Git, Python 3.11+ for the audit/package helpers, and a compatible AI agent for skill execution.
 
 ```bash
-git clone git@github.com:Lucien-1127/strata-skill.git ~/.hermes/skills/
+git clone https://github.com/Lucien-1127/strata-skill.git
+cd strata-skill
+
+# Inspect the complete active catalog
+python tools/audit_skills.py --root . --json /tmp/strata-audit.json --markdown /tmp/strata-audit.md
+
+# Build an allowlist-only ZIP with just one selected skill
+python tools/build_agensi_pack.py --root . --out /tmp/agensi-prompt-factory.zip prompt-factory
 ```
 
-### 2. 連結技能
+**Hermes Agent (manual installation example):** Keep this repository outside the agent's managed skills directory, then link or copy an individual skill folder after reviewing its prerequisites. For example:
 
 ```bash
-hermes skill link ~/.hermes/skills/
+mkdir -p "$HOME/.hermes/skills"
+ln -s "$(pwd)/prompt-factory" "$HOME/.hermes/skills/prompt-factory"
 ```
 
-### 3. 驗證安裝
+This example expects no existing `~/.hermes/skills/prompt-factory` path. Verify that your Hermes installation discovers the skill before relying on it. The exact import and invocation method can vary by agent and version.
+
+## Marketplace submission readiness
+
+Agensi accepts individual `SKILL.md` skills and curated packs of up to **50 skills** per listing. **Do not upload this entire repository as one package.** The packaged ZIP is generated only from selected skill directories; root-level private documents and internal state files are excluded.
+
+Our workflow is:
+
+1. **Inventory** — generate [docs/SKILL_CATALOG.md](docs/SKILL_CATALOG.md) directly from file paths.
+2. **Audit** — inspect every active `SKILL.md` for missing metadata, broken links, unsafe patterns, and possible secrets.
+3. **Triage** — treat blocking security findings separately from warnings; investigate false positives with regression cases.
+4. **Build** — package only explicitly selected, reviewed skills with deterministic ZIP output and SHA-256 checksums.
+5. **Verify** — run [CI checks](.github/workflows/skill-audit.yml) and skill-specific execution tests.
+6. **Release** — publish only after human review of provenance, allowed permissions, licensing, and actual results.
+
+The library-wide audit is **static analysis**, not a guarantee of security, compatibility, legal correctness, or successful execution. See the outstanding findings in [marketplace readiness](docs/MARKETPLACE_READINESS.md).
+
+## Contributing and quality bar
+
+Use one directory per skill with a `SKILL.md` containing frontmatter `name` and `description`. Prefer concise prerequisites, exact procedures, a runnable verification example, known limitations, and supporting files in `references/` or `scripts/`.
+
+Before proposing changes:
 
 ```bash
-hermes skills list | head -20
+python -m unittest discover -s tests -p 'test_marketplace_*.py' -v
+python tools/generate_catalog.py --check
+python tools/audit_skills.py --fail-on-blockers
 ```
 
-看到技能清單即表示安裝成功。
+Do not commit secrets, private contracts, personal data, or generated binaries. Any high-impact change to a self-modifying skill requires a reviewed diff and regression evidence; no silent auto-merge.
+
+## Licensing and limitations
+
+The repository is provided under the [MIT License](LICENSE). A commercial listing must still respect any third-party components and the destination marketplace's originality requirements. Taiwan legal skills are educational and workflow-focused, **not a replacement for qualified legal review**.
 
 ---
 
-## 如何貢獻
+## 繁體中文說明
 
-我們歡迎任何形式的貢獻！請遵循以下流程：
+**Strata Skill 是以 Hermes Agent 為主要使用情境的技能庫，目前有 142 份有效 `SKILL.md`。** 技能以提示詞工程、代理工作流程、開發維運、研究、法律文件與品質驗收為主。
 
-1. **Fork** 此儲存庫
-2. 建立您的功能分支：`git checkout -b feature/my-awesome-skill`
-3. 撰寫或修改技能（每個技能為一個獨立目錄，內含 `SKILL.md`）
-4. 確保您的技能包含：
-   - `SKILL.md` 格式正確（YAML frontmatter + Markdown 內文）
-   - 清晰的觸發條件與使用說明
-   - 驗證步驟（如適用）
-5. 提交 Pull Request 至 `master` 分支
+- [完整技能清冊](docs/SKILL_CATALOG.md) 由程式依實際資料夾產生，不再手動填寫技能總數。
+- [市場上架準備報告](docs/MARKETPLACE_READINESS.md) 會區分已完成的驗證、已知缺點與待解決事項。
+- **上架 Agensi 時只挑選要販售的技能進行安全封裝**，不能直接打包整個儲存庫，也不能將自我評分當成外部品質認證。
+- **閉環流程：** 發現問題 → 留存證據 → 修正 → 回歸測試 → 人工確認 → 再交付。未經驗證的功能不可標成已完成。
+- 這個專案採 MIT 授權。公開技能的商業上架必須再確認第三方來源、授權及商品原創價值。
 
-### PR 規範
-
-- PR 標題請簡潔描述變更內容
-- 說明新增/修改的技能用途與觸發條件
-- 確保不含任何 API Key、Token、密碼或環境路徑
-- 若為新技能，請在 README 對應分類中補上描述
-
----
-
-## 授權條款
-
-本專案採用 MIT License — 詳見 [LICENSE](./LICENSE) 檔案。
+如需安裝，請先閱讀對應 `SKILL.md` 的前置條件；不同 Agent 的工具名稱與權限並不一定相同。

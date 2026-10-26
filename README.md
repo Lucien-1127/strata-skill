@@ -2,7 +2,7 @@
 
 **143 active skill specifications** for planning, prompt engineering, developer workflows, research, legal-document workflows, and quality control. The repository is primarily developed for **Hermes Agent**. A skill's presence in this library **does not** mean it has been independently tested on every agent platform.
 
-[Complete, generated skill catalog](docs/SKILL_CATALOG.md) · [Quality and marketplace readiness](docs/MARKETPLACE_READINESS.md) · [Agensi pilot proposal](docs/AGENSI_CREATOR_PILOT.md) · [MIT license](LICENSE)
+[Complete, generated skill catalog](docs/SKILL_CATALOG.md) · [Quality and marketplace readiness](docs/MARKETPLACE_READINESS.md) · [Agensi pilot proposals](docs/AGENSI_CREATOR_PILOT.md) · [Trust/Audit listing draft](docs/AGENSI_RELIABILITY_LISTING.md) · [MIT license](LICENSE)
 
 ## What you can do
 

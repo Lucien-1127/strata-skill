@@ -14,11 +14,11 @@
 | Download-to-shell review warnings | 2 (both quoted blocked-command examples) | Pattern scan; manually reviewed contextual examples |
 | Root-level non-catalog files | 3 | Root-only warning; **never packaged** |
 | Marketplace packaging smoke test | PASS for `prompt-factory` | GitHub Actions 3.11 / 3.13 |
-| Regression suite | 9 tests PASS on Python 3.11 and 3.13 | `tests/test_marketplace_readiness.py` |
+| Regression suite | 10 tests PASS on Python 3.11 and 3.13 | `tests/test_marketplace_readiness.py` |
 | Real Hermes / Claude Code / Cursor execution | **NOT VERIFIED** | Separate real-agent acceptance required |
 | Agensi seller approval, payouts, and sales | **NOT VERIFIED** | External platform account / manual approval required |
 
-**Interpretation:** A green CI result means that the current *static security blockers, catalog synchronization, packager smoke test and nine helper regression tests* pass. It does **not** certify all 142 skills as production-ready or marketable.
+**Interpretation:** A green CI result means that the current *static security blockers, catalog synchronization, packager smoke test and ten helper regression tests* pass. It does **not** certify all 142 skills as production-ready or marketable.
 
 ## Auditing roles and handoff contract
 

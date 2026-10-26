@@ -80,6 +80,14 @@ class MarketplaceReadinessTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Unsupported"):
             create_pack(self.root, Path(self.temp.name) / "package.zip", ["first-skill"])
 
+    def test_video_pipeline_uses_argument_list_without_shell(self):
+        import ast
+        source = (Path(__file__).resolve().parents[1] /
+                  "media-pipeline" / "scripts" / "idol-video.py").read_text(encoding="utf-8")
+        ast.parse(source)
+        self.assertNotIn("shell=True", source)
+        self.assertIn("subprocess.run(cmd, capture_output=True", source)
+
     def test_deterministic_archive(self):
         one = Path(self.temp.name) / "one.zip"
         two = Path(self.temp.name) / "two.zip"

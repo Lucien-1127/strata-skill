@@ -36,6 +36,10 @@ jobs:
           python -m zipfile -l /tmp/agensi-prompt-factory.zip
           python tools/build_agensi_pack.py --root . --out /tmp/agensi-agent-reliability.zip agent-reliability-audit
           python -m zipfile -l /tmp/agensi-agent-reliability.zip
+      - name: Independent ZIP inspection
+        run: |
+          python tools/inspect_agensi_zip.py /tmp/agensi-prompt-factory.zip
+          python tools/inspect_agensi_zip.py /tmp/agensi-agent-reliability.zip
       - name: Upload vetted pilot ZIP
         if: success()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4

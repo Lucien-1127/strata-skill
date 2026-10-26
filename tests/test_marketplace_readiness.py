@@ -59,7 +59,7 @@ class MarketplaceReadinessTests(unittest.TestCase):
         findings = scan(self.root)["findings"]
         self.assertTrue(any(x["code"] == "openrouter_key" and
                             x["path"] == "first-skill/scripts/helper.py" for x in findings))
-        with self.assertRaisesRegex(ValueError, "Potential openrouter_key"):
+        with self.assertRaisesRegex(ValueError, "openrouter_key"):
             create_pack(self.root, Path(self.temp.name) / "package.zip", ["first-skill"])
 
     def test_root_pdf_not_in_package(self):

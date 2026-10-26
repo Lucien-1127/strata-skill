@@ -127,6 +127,9 @@ def main(argv=None) -> int:
     if args.markdown:
         args.markdown.parent.mkdir(parents=True, exist_ok=True)
         args.markdown.write_text(report_markdown(result), encoding="utf-8")
+    for issue in result["findings"]:
+        if issue["level"] == "BLOCKER":
+            print(f"BLOCKER {issue['code']} {issue['path']}")
     print(f"SKILLS={result['skill_count']} BLOCKERS={result['summary']['blockers']} WARNINGS={result['summary']['warnings']}")
     print(json.dumps(result["summary"]["by_code"], ensure_ascii=False, sort_keys=True))
     return int(args.fail_on_blockers and result["summary"]["blockers"] > 0)

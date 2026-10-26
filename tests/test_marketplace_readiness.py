@@ -70,10 +70,23 @@ class MarketplaceReadinessTests(unittest.TestCase):
         self.assertEqual(result["skills"], ["first-skill"])
         with ZipFile(target) as zf:
             names = zf.namelist()
-        self.assertIn("skills/first-skill/SKILL.md", names)
-        self.assertIn("skills/first-skill/references/usage.md", names)
+        self.assertIn("first-skill/SKILL.md", names)
+        self.assertIn("first-skill/references/usage.md", names)
         self.assertIn("LICENSE", names)
         self.assertNotIn("borrower.pdf", names)
+
+    def test_block_if_symlink_in_skill(self):
+        (self.root / "first-skill" / "shadow.txt").symlink_to(
+            self.root / "first-skill" / "SKILL.md")
+        with self.assertRaisesRegex(ValueError, "Symlinks not allowed"):
+            create_pack(self.root, Path(self.temp.name) / "package.zip", ["first-skill"])
+
+    def test_single_skill_package_has_one_top_folder(self):
+        target = Path(self.temp.name) / "package.zip"
+        create_pack(self.root, target, ["first-skill"])
+        with ZipFile(target) as zipf:
+            self.assertIn("first-skill/SKILL.md", zipf.namelist())
+            self.assertNotIn("skills/first-skill/SKILL.md", zipf.namelist())
 
     def test_block_if_binary_in_skill(self):
         (self.root / "first-skill" / "payload.exe").write_bytes(b"exe")

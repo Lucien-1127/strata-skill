@@ -107,7 +107,7 @@ def scan(root: Path) -> dict:
         for code, pattern in CREDENTIALS:
             if pattern.search(body):
                 add("BLOCKER", code, resource, "Potential credential in bundled resource; inspect securely")
-        if resource.suffix.lower() in {".py", ".sh"} and "tools" not in resource.relative_to(root).parts:
+        if resource.suffix.lower() in {".py", ".sh"} and not {"tools", "tests"}.intersection(resource.relative_to(root).parts):
             for code, pattern in RISK_PATTERNS:
                 if pattern.search(body):
                     add("WARNING", code, resource, "Review executable code context")

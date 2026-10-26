@@ -2,7 +2,7 @@
 
 > Generated from repository SKILL.md paths. Structural inventory only; not a claim of runtime compatibility or marketplace approval.
 
-**Active skills: 142** (archived skills excluded).
+**Active skills: 143** (archived skills excluded).
 
 | Group | Skills |
 | --- | ---: |
@@ -17,7 +17,7 @@
 | quality | 2 |
 | research | 4 |
 | security | 1 |
-| standalone | 87 |
+| standalone | 88 |
 | strategy | 13 |
 | system | 1 |
 | system-admin | 2 |
@@ -94,9 +94,10 @@
 
 - [keter-prompt-defense](../security/keter-prompt-defense/SKILL.md)
 
-## standalone (87)
+## standalone (88)
 
 - [agent-cognition-arch](../agent-cognition-arch/SKILL.md)
+- [agent-reliability-audit](../agent-reliability-audit/SKILL.md)
 - [agnes-image-generator](../agnes-image-generator/SKILL.md)
 - [agnes-quota-router](../agnes-quota-router/SKILL.md)
 - [agnes-token-routing](../agnes-token-routing/SKILL.md)

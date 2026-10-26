@@ -97,7 +97,7 @@
 ## standalone (88)
 
 - [agent-cognition-arch](../agent-cognition-arch/SKILL.md)
-- [agent-reliability-audit](../agent-reliability-audit/SKILL.md)
+- [agent-evidence-closeout-gate](../agent-evidence-closeout-gate/SKILL.md)
 - [agnes-image-generator](../agnes-image-generator/SKILL.md)
 - [agnes-quota-router](../agnes-quota-router/SKILL.md)
 - [agnes-token-routing](../agnes-token-routing/SKILL.md)

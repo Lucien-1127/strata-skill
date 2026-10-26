@@ -1,4 +1,4 @@
-# Report contract — Agent Reliability Audit v1.0
+# Report contract — Agent Evidence Closeout Gate v1.0
 
 The tool is local-only and read-only. It checks report consistency and evidence bytes, **not authenticity of the claims**.
 

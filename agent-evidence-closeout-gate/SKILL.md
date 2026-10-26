@@ -1,5 +1,5 @@
 ---
-name: agent-reliability-audit
+name: agent-evidence-closeout-gate
 description: Use when an AI agent claims a multi-step task is complete, fixed or ready to release; audit evidence and unresolved failures.
 summary: Evidence-based closeout for complex AI agent tasks. Validate test outcomes, artifact checksums, failures, and release readiness instead of trusting self-reported success.
 version: 0.1.0
@@ -8,7 +8,7 @@ keywords: [agent-verification, regression, evidence, workflow, safety, closeout]
 status: beta
 ---
 
-# Agent Reliability Audit
+# Agent Evidence Closeout Gate
 
 Use this skill when a user or another agent claims a multi-step task was completed, fixed, tested, or ready to ship. It requires **reviewable evidence files**, honest status labels, and clear treatment of blocked work.
 

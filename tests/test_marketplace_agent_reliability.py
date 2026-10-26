@@ -1,4 +1,4 @@
-"""Regression suite for the sellable Agent Reliability Audit skill."""
+"""Regression suite for the sellable Agent Evidence Closeout Gate skill."""
 from __future__ import annotations
 
 import hashlib
@@ -9,7 +9,7 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "agent-reliability-audit" / "scripts"))
+sys.path.insert(0, str(ROOT / "agent-evidence-closeout-gate" / "scripts"))
 from verify_closeout import validate, load_report, DuplicateKeyError
 
 DIMS = ("functional", "safety", "regression", "customer")
@@ -126,7 +126,7 @@ class ReliabilityAuditTests(unittest.TestCase):
         import subprocess
         report_path = self.root / "report.json"
         report_path.write_text(json.dumps(self.report), encoding="utf-8")
-        script = ROOT / "agent-reliability-audit" / "scripts" / "verify_closeout.py"
+        script = ROOT / "agent-evidence-closeout-gate" / "scripts" / "verify_closeout.py"
         result = subprocess.run(
             [sys.executable, str(script), "--report", str(report_path),
              "--evidence-root", str(self.root)],

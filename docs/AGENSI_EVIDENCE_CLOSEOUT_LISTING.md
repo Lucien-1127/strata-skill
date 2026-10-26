@@ -1,10 +1,10 @@
-# Agensi Listing Draft — Agent Reliability Audit
+# Agensi Listing Draft — Agent Evidence Closeout Gate
 
 **Status:** Candidate for private creator review. Not submitted or approved by Agensi. The skill has automated validation tests, **not a real-world Agent execution certificate**.
 
 ## Product fields
 
-**Title:** Agent Reliability Audit — Evidence-Based Task Closeout
+**Title:** Agent Evidence Closeout Gate — Four-Gate Verification
 
 **Summary (under 300 characters):** Stop AI agents from claiming success without recorded checks. Run a four-gate closeout review covering functionality, safety, regressions and customer acceptance, plus a local SHA-256 evidence validator that explicitly separates completed, blocked, regressed and unverified work.
 

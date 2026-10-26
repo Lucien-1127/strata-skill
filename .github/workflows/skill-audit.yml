@@ -34,12 +34,21 @@ jobs:
         run: |
           python tools/build_agensi_pack.py --root . --out /tmp/agensi-prompt-factory.zip prompt-factory
           python -m zipfile -l /tmp/agensi-prompt-factory.zip
+          python tools/build_agensi_pack.py --root . --out /tmp/agensi-agent-reliability.zip agent-reliability-audit
+          python -m zipfile -l /tmp/agensi-agent-reliability.zip
       - name: Upload vetted pilot ZIP
         if: success()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: agensi-prompt-factory-python-${{ matrix.python-version }}
           path: /tmp/agensi-prompt-factory.zip
+          if-no-files-found: error
+      - name: Upload Trust/Audit marketplace candidate ZIP
+        if: success()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: agensi-agent-reliability-python-${{ matrix.python-version }}
+          path: /tmp/agensi-agent-reliability.zip
           if-no-files-found: error
       - name: Upload audit evidence
         if: always()

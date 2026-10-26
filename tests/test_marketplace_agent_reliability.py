@@ -168,10 +168,16 @@ class ReliabilityAuditTests(unittest.TestCase):
         self.report["attempts"] = 1
         self.assertEqual(self.verdict(), "invalid")
 
-    def test_no_progress_after_two_attempts_is_unresolved(self):
+    def test_no_progress_after_two_failed_attempts_is_unresolved(self):
         self.report["status"] = "no_progress"
         self.report["attempts"] = 2
+        self.report["checks"][0]["result"] = "fail"
         self.assertEqual(self.verdict(), "unresolved")
+
+    def test_no_progress_with_all_checks_passing_is_invalid(self):
+        self.report["status"] = "no_progress"
+        self.report["attempts"] = 2
+        self.assertEqual(self.verdict(), "invalid")
 
     def test_duplicate_json_keys_rejected(self):
         path = self.root / "duplicate.json"

@@ -28,7 +28,7 @@ An AI agent can produce plausible explanations of work that was never executed. 
 2. Requires four separate outcomes: functional, safety, regression and customer acceptance.
 3. Distinguishes genuine blockers and regressions from final completion.
 4. Can mechanically check a JSON report's required fields, claimed check results, local evidence file paths and SHA-256 digests using Python.
-5. Returns predictable process outcomes: valid complete, valid unresolved or invalid evidence.
+5. Returns explicit outcomes: `evidence_consistent`, `unresolved` or `invalid`, with exit codes 0, 2 or 1. A consistent record does not establish independent task completion.
 
 **Limits:** Hashes verify file integrity, not authenticity. The buyer must provide actual tool logs/evidence and review them independently. The script does not control the customer's agents, run their tests, verify remote deployments or make independent judgments.
 
@@ -36,7 +36,8 @@ An AI agent can produce plausible explanations of work that was never executed. 
 
 - One `SKILL.md` with structured task-closure instructions.
 - `scripts/verify_closeout.py` — local-only, no third-party dependencies and no network access.
-- `references/report-contract.md` — JSON schema guidance, error cases and Traditional Chinese notes.
+- `references/report-contract.md` — JSON report contract, error cases and Traditional Chinese notes.
+- `templates/closeout-template.json` — safe starter record with all four gates unverified by default.
 - Repository-side automated negative and CLI tests (available in GitHub, not required at buyer runtime).
 
 ## Permissions and disclosures
@@ -58,6 +59,20 @@ Do not imply that a permission granted to the verifier also authorizes the broad
 - Test scenarios include four passing gates, absent/changed evidence, path traversal, symlinks, failure statuses and malformed JSON.
 - **Still required:** real Hermes execution on a representative customer workflow, independent reviewer inspection of the generated closeout record and the actual customer deliverable.
 - **Not yet obtained:** Agensi approval, customer feedback, third-party compatibility tests, payout account validation or sales.
+
+## Differentiation from existing Agensi skills
+
+There is already a separate Agensi product named `Agent Reliability Audit` by another creator, as well as other agent audit products. **Do not use that exact title, slug, or imply an endorsement, derivative relationship, or exclusivity.** This candidate is instead `Agent Evidence Closeout Gate`: a narrowly scoped, mechanical closeout-contract validator for local evidence files, explicit four-gate completion claims, and deterministic invalid/blocked outcomes. It does not analyze full distributed traces, benchmark model quality, or replace those other products.
+
+## See it in action — illustrative scenario, not a customer testimonial
+
+**Request:** "Our agent claims the deployment is complete, but the safety verification evidence was modified after the run. Check whether the completion record is internally consistent, without contacting the deployment or making any changes."
+
+**Inputs:** One report JSON declaring `completed`, including the four checks (functional, safety, regression, customer), and four approved local evidence files. The expected safety file hash in the report is from an earlier version, but the actual current file bytes differ.
+
+**Expected operation:** Use `scripts/verify_closeout.py --report ... --evidence-root ...`. The validator reads local evidence, recomputes each SHA-256, and refuses the completion claim when the stored safety digest does not match the actual file. It does not overwrite evidence, run arbitrary commands or silently resubmit deployment changes.
+
+**Expected result:** JSON `{"verdict":"invalid", "exit_code":1, ...}` with a `check[...]: evidence checksum mismatch` finding. The agent's final report must say that the record is inconsistent, state which gate needs a fresh authoritative log, and request independent review. This scenario is covered by automated regression tests, **but the paragraph above is not a transcript of a live customer deployment**. Actual Agent runtime demonstration must be captured before publishing the listing as a proven integration.
 
 ## Pricing experiment — proposal, not a claim of market prices
 

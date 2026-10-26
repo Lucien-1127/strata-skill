@@ -40,9 +40,11 @@ def create_pack(root: Path, output: Path, selected: list[str]) -> dict:
             raise ValueError(f"Skill {name} has blocking audit findings: {problems}")
         folder = root / prefix
         for path in sorted(folder.rglob("*")):
+            if path.is_symlink():
+                raise ValueError(f"Symlinks not allowed in skill packaging: {path.relative_to(root)}")
             if not path.is_file():
                 continue
-            if path.is_symlink() or any(p in EXCLUDED for p in path.relative_to(folder).parts):
+            if any(p in EXCLUDED for p in path.relative_to(folder).parts):
                 continue
             if path.suffix.lower() not in ALLOWED_SUFFIXES and path.name != ".env.example":
                 raise ValueError(f"Unsupported or binary file in skill: {path.relative_to(root)}")
@@ -56,7 +58,10 @@ def create_pack(root: Path, output: Path, selected: list[str]) -> dict:
                     raise ValueError(f"Potential {code} in {path.relative_to(root)}")
             if path.suffix == ".py" and len(data) > 20 * 1024:
                 raise ValueError(f"Script over 20KB; split before Agensi submission: {path}")
-            archive_path = f"skills/{name}/{path.relative_to(folder).as_posix()}"
+            # Use a single top-level skill folder for stand-alone listings.
+            # For multi-skill packs, group entries under skills/.
+            archive_prefix = name if len(selected) == 1 else f"skills/{name}"
+            archive_path = f"{archive_prefix}/{path.relative_to(folder).as_posix()}"
             if archive_path in files:
                 raise ValueError(f"Archive path collision: {archive_path}")
             files[archive_path] = data

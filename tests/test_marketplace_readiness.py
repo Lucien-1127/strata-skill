@@ -11,6 +11,7 @@ from zipfile import ZipFile
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 from audit_skills import scan
 from build_agensi_pack import create_pack
+from inspect_agensi_zip import inspect
 
 
 class MarketplaceReadinessTests(unittest.TestCase):
@@ -70,10 +71,23 @@ class MarketplaceReadinessTests(unittest.TestCase):
         self.assertEqual(result["skills"], ["first-skill"])
         with ZipFile(target) as zf:
             names = zf.namelist()
-        self.assertIn("skills/first-skill/SKILL.md", names)
-        self.assertIn("skills/first-skill/references/usage.md", names)
+        self.assertIn("first-skill/SKILL.md", names)
+        self.assertIn("first-skill/references/usage.md", names)
         self.assertIn("LICENSE", names)
         self.assertNotIn("borrower.pdf", names)
+
+    def test_block_if_symlink_in_skill(self):
+        (self.root / "first-skill" / "shadow.txt").symlink_to(
+            self.root / "first-skill" / "SKILL.md")
+        with self.assertRaisesRegex(ValueError, "Symlinks not allowed"):
+            create_pack(self.root, Path(self.temp.name) / "package.zip", ["first-skill"])
+
+    def test_single_skill_package_has_one_top_folder(self):
+        target = Path(self.temp.name) / "package.zip"
+        create_pack(self.root, target, ["first-skill"])
+        with ZipFile(target) as zipf:
+            self.assertIn("first-skill/SKILL.md", zipf.namelist())
+            self.assertNotIn("skills/first-skill/SKILL.md", zipf.namelist())
 
     def test_block_if_binary_in_skill(self):
         (self.root / "first-skill" / "payload.exe").write_bytes(b"exe")
@@ -87,6 +101,38 @@ class MarketplaceReadinessTests(unittest.TestCase):
         ast.parse(source)
         self.assertNotIn("shell=True", source)
         self.assertIn("subprocess.run(cmd, capture_output=True", source)
+
+    def test_post_build_zip_inspection_is_clean(self):
+        target = Path(self.temp.name) / "package.zip"
+        create_pack(self.root, target, ["first-skill"])
+        result = inspect(target)
+        self.assertEqual(result["verdict"], "static_pass")
+        self.assertEqual(result["skills"], ["first-skill/SKILL.md"])
+
+    def test_zip_inspector_rejects_path_traversal(self):
+        target = Path(self.temp.name) / "malformed.zip"
+        with ZipFile(target, "w") as zf:
+            zf.writestr("../outside.txt", "unsafe")
+            zf.writestr("first-skill/SKILL.md",
+                        (self.root / "first-skill" / "SKILL.md").read_text())
+        self.assertEqual(inspect(target)["verdict"], "invalid")
+        self.assertTrue(any("Unsafe ZIP entry path" in b for b in inspect(target)["blockers"]))
+
+    def test_zip_inspector_rejects_unsupported_payload(self):
+        target = Path(self.temp.name) / "malformed.zip"
+        with ZipFile(target, "w") as zf:
+            zf.writestr("first-skill/SKILL.md",
+                        (self.root / "first-skill" / "SKILL.md").read_text())
+            zf.writestr("first-skill/binary.exe", b"not permitted")
+        self.assertTrue(any("Unsupported file type" in b for b in inspect(target)["blockers"]))
+
+    def test_zip_inspector_catches_invalid_python(self):
+        target = Path(self.temp.name) / "broken-script.zip"
+        with ZipFile(target, "w") as zf:
+            zf.writestr("first-skill/SKILL.md",
+                        (self.root / "first-skill" / "SKILL.md").read_text())
+            zf.writestr("first-skill/scripts/run.py", "def bad(:\\n")
+        self.assertTrue(any("Python syntax error" in b for b in inspect(target)["blockers"]))
 
     def test_deterministic_archive(self):
         one = Path(self.temp.name) / "one.zip"

@@ -5,8 +5,11 @@ on:
   push:
     branches:
       - master
-      - 'audit/agensi-readiness-*'
   workflow_dispatch:
+
+concurrency:
+  group: skill-catalog-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -34,12 +37,25 @@ jobs:
         run: |
           python tools/build_agensi_pack.py --root . --out /tmp/agensi-prompt-factory.zip prompt-factory
           python -m zipfile -l /tmp/agensi-prompt-factory.zip
+          python tools/build_agensi_pack.py --root . --out /tmp/agensi-agent-evidence-closeout.zip agent-evidence-closeout-gate
+          python -m zipfile -l /tmp/agensi-agent-evidence-closeout.zip
+      - name: Independent ZIP inspection
+        run: |
+          python tools/inspect_agensi_zip.py /tmp/agensi-prompt-factory.zip
+          python tools/inspect_agensi_zip.py /tmp/agensi-agent-evidence-closeout.zip
       - name: Upload vetted pilot ZIP
         if: success()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: agensi-prompt-factory-python-${{ matrix.python-version }}
           path: /tmp/agensi-prompt-factory.zip
+          if-no-files-found: error
+      - name: Upload Trust/Audit marketplace candidate ZIP
+        if: success()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: agensi-agent-evidence-closeout-python-${{ matrix.python-version }}
+          path: /tmp/agensi-agent-evidence-closeout.zip
           if-no-files-found: error
       - name: Upload audit evidence
         if: always()

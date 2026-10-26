@@ -1,8 +1,8 @@
 # Strata Skill — AI Agent Skills Library
 
-**142 active skill specifications** for planning, prompt engineering, developer workflows, research, legal-document workflows, and quality control. The repository is primarily developed for **Hermes Agent**. A skill's presence in this library **does not** mean it has been independently tested on every agent platform.
+**143 active skill specifications** for planning, prompt engineering, developer workflows, research, legal-document workflows, and quality control. The repository is primarily developed for **Hermes Agent**. A skill's presence in this library **does not** mean it has been independently tested on every agent platform.
 
-[Complete, generated skill catalog](docs/SKILL_CATALOG.md) · [Quality and marketplace readiness](docs/MARKETPLACE_READINESS.md) · [Agensi pilot proposal](docs/AGENSI_CREATOR_PILOT.md) · [MIT license](LICENSE)
+[Complete, generated skill catalog](docs/SKILL_CATALOG.md) · [Quality and marketplace readiness](docs/MARKETPLACE_READINESS.md) · [Agensi pilot proposals](docs/AGENSI_CREATOR_PILOT.md) · [Trust/Audit listing draft](docs/AGENSI_EVIDENCE_CLOSEOUT_LISTING.md) · [MIT license](LICENSE)
 
 ## What you can do
 
@@ -11,7 +11,9 @@
 - **Improve developer operations:** documented diagnostics, deployment procedures, and quality gates.
 - **Work on domain-specific tasks:** legal and research skills with a requirement for verification and human oversight.
 
-**Featured pilot:** [Prompt Factory](prompt-factory/SKILL.md) — a beta skill for generating and reviewing prompts and agent-skill specifications. It uses bundled templates; its evaluation scores are self-assessments, **not independent benchmark results**.
+**Agensi evidence closeout pilot:** [Agent Evidence Closeout Gate](agent-evidence-closeout-gate/SKILL.md) — a beta evidence-based closeout skill with four acceptance gates, a read-only SHA-256 evidence verifier, explicit blocked/regressed states, and negative regression tests. **It does not independently authenticate agent activity.**
+
+**Additional pilot:** [Prompt Factory](prompt-factory/SKILL.md) — a beta skill for generating and reviewing prompts and agent-skill specifications. Its heuristic evaluation scores are **not independent benchmark results**.
 
 ## Quick start
 
@@ -24,7 +26,8 @@ cd strata-skill
 # Inspect the complete active catalog
 python tools/audit_skills.py --root . --json /tmp/strata-audit.json --markdown /tmp/strata-audit.md
 
-# Build an allowlist-only ZIP with just one selected skill
+# Build allowlist-only ZIPs for candidate marketplace pilots
+python tools/build_agensi_pack.py --root . --out /tmp/agensi-agent-evidence-closeout.zip agent-evidence-closeout-gate
 python tools/build_agensi_pack.py --root . --out /tmp/agensi-prompt-factory.zip prompt-factory
 ```
 
@@ -74,7 +77,7 @@ The repository is provided under the [MIT License](LICENSE). A commercial listin
 
 ## 繁體中文說明
 
-**Strata Skill 是以 Hermes Agent 為主要使用情境的技能庫，目前有 142 份有效 `SKILL.md`。** 技能以提示詞工程、代理工作流程、開發維運、研究、法律文件與品質驗收為主。
+**Strata Skill 是以 Hermes Agent 為主要使用情境的技能庫，目前有 143 份有效 `SKILL.md`。** 技能以提示詞工程、代理工作流程、開發維運、研究、法律文件與品質驗收為主。
 
 - [完整技能清冊](docs/SKILL_CATALOG.md) 由程式依實際資料夾產生，不再手動填寫技能總數。
 - [市場上架準備報告](docs/MARKETPLACE_READINESS.md) 會區分已完成的驗證、已知缺點與待解決事項。

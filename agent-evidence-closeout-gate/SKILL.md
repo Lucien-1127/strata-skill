@@ -6,6 +6,8 @@ version: 0.1.0
 tags: [agent-reliability, audit, quality, automation]
 keywords: [agent-verification, regression, evidence, workflow, safety, closeout]
 status: beta
+use_cases: Check agent task closeout evidence, report blocked or regressed work, verify local SHA-256 audit artifacts.
+docs_url: https://github.com/Lucien-1127/strata-skill/pull/8
 ---
 
 # Agent Evidence Closeout Gate
